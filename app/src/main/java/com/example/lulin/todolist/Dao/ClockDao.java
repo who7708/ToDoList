@@ -6,10 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
-import com.example.lulin.todolist.Bean.Clock;
 import com.example.lulin.todolist.Bean.Tomato;
 import com.example.lulin.todolist.Bean.User;
+import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,11 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
-
 
 public class ClockDao {
     static final String TABLE_NAME = "timer_schedule";
@@ -43,7 +37,7 @@ public class ClockDao {
     private int allDuration = 0;
 
     public ClockDao(Context context) {
-        mDbHelper = new MyDatabaseHelper(context,"Data.db", null, 2);
+        mDbHelper = new MyDatabaseHelper(context, "Data.db", null, 2);
     }
 
     public ClockDao open() {
@@ -70,7 +64,7 @@ public class ClockDao {
         values.put(COLUMN_NAME_END_TIME, formatDateTime(new Date()));
 
         String selection = _ID + " = ?";
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] selectionArgs = {String.valueOf(id)};
 
         int count = db.update(
                 TABLE_NAME,
@@ -82,7 +76,7 @@ public class ClockDao {
     }
 
     public void delete(long id) {
-        db.delete(TABLE_NAME, _ID + " = ?", new String[] {String.valueOf(id)});
+        db.delete(TABLE_NAME, _ID + " = ?", new String[]{String.valueOf(id)});
     }
 
     public HashMap getToday() {
@@ -95,7 +89,7 @@ public class ClockDao {
         };
 
         String selection = COLUMN_NAME_DATE_ADD + " = ?";
-        String[] selectionArgs = { formatDate(new Date()) };
+        String[] selectionArgs = {formatDate(new Date())};
 
         Cursor cursor = db.query(
                 TABLE_NAME,                     // The table to query
@@ -121,7 +115,6 @@ public class ClockDao {
             cursor.close();
         }
 
-
         results.put("times", times);
         results.put("duration", duration);
 
@@ -146,7 +139,6 @@ public class ClockDao {
      * @return
      */
     public long create(Tomato tomato) {
-
         open();
         ContentValues values = new ContentValues();
         values.put("clocktitle", tomato.getTitle());
@@ -154,27 +146,25 @@ public class ClockDao {
         values.put("shortBreak", tomato.getShortBreak());
         values.put("longBreak", tomato.getLongBreak());
         values.put("frequency", tomato.getFrequency());
-        values.put("objectId", tomato.getObjectId());
+        // values.put("objectId", tomato.getObjectId());
         values.put("imgId", tomato.getImgId());
         long id = db.insert("Clock", null, values);
         close();
         return id;
     }
 
-
-
     public List<Tomato> getDbAllTomato() {
         open();
         List<Tomato> tomatoList = new ArrayList<Tomato>();
-        Cursor cursor=db.rawQuery("SELECT * FROM Clock", null);
-        while(cursor.moveToNext()) {
+        Cursor cursor = db.rawQuery("SELECT * FROM Clock", null);
+        while (cursor.moveToNext()) {
             Tomato data = new Tomato();
             data.setTitle(cursor.getString(cursor.getColumnIndex("clocktitle")));
             data.setWorkLength(cursor.getInt(cursor.getColumnIndex("workLength")));
             data.setShortBreak(cursor.getInt(cursor.getColumnIndex("shortBreak")));
             data.setLongBreak(cursor.getInt(cursor.getColumnIndex("longBreak")));
             data.setFrequency(cursor.getInt(cursor.getColumnIndex("frequency")));
-            data.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+            // data.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
             data.setImgId(cursor.getInt(cursor.getColumnIndex("imgId")));
             tomatoList.add(data);
         }
@@ -189,57 +179,57 @@ public class ClockDao {
     public HashMap getAmount() {
         HashMap<String, Integer> results = new HashMap<>();
 
-//        String[] projection = {
-//                _ID,
-//                COLUMN_NAME_END_TIME,
-//                COLUMN_NAME_DURATION
-//        };
-//
-//        Cursor cursor = db.query(
-//                TABLE_NAME,                     // The table to query
-//                projection,                       // The columns to return
-//                null,                        // The columns for the WHERE clause
-//                null,                    // The values for the WHERE clause
-//                null,                            // don't group the rows
-//                null,                            // don't filter by row groups
-//                null                             // don't sort order
-//        );
-//
-//        int duration = 0;
-//        int times  = 0;
-//
-//        try {
-//            while (cursor.moveToNext()) {
-//                if (!cursor.isNull(cursor.getColumnIndex(COLUMN_NAME_END_TIME))) {
-//                    times++;
-//                    duration += cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_DURATION));
-//                }
-//            }
-//        } finally {
-//            cursor.close();
-//        }
+        //        String[] projection = {
+        //                _ID,
+        //                COLUMN_NAME_END_TIME,
+        //                COLUMN_NAME_DURATION
+        //        };
+        //
+        //        Cursor cursor = db.query(
+        //                TABLE_NAME,                     // The table to query
+        //                projection,                       // The columns to return
+        //                null,                        // The columns for the WHERE clause
+        //                null,                    // The values for the WHERE clause
+        //                null,                            // don't group the rows
+        //                null,                            // don't filter by row groups
+        //                null                             // don't sort order
+        //        );
+        //
+        //        int duration = 0;
+        //        int times  = 0;
+        //
+        //        try {
+        //            while (cursor.moveToNext()) {
+        //                if (!cursor.isNull(cursor.getColumnIndex(COLUMN_NAME_END_TIME))) {
+        //                    times++;
+        //                    duration += cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_DURATION));
+        //                }
+        //            }
+        //        } finally {
+        //            cursor.close();
+        //        }
 
-        user = User.getCurrentUser(User.class);
-        BmobQuery<Clock> bmobQuery = new BmobQuery<Clock>();
-        bmobQuery.addWhereEqualTo("user", user);
-        bmobQuery.findObjects(new FindListener<Clock>() {
-            @Override
-            public void done(List<Clock> list, BmobException e) {
-                if (e==null){
-                    Log.i("Clock", "查询到: " +list.size()+" 条数据");
-                    for (Clock clock : list){
-                        if (clock.getEnd_time()!=null){
-                            allTimes++;
-                            allDuration += clock.getDuration();
-                        }
-                    }
-                    Log.i("Clock", "番茄钟个数：" + allTimes);
-                    Log.i("Clock", "累计时间： " + allDuration);
-                } else {
-
-                }
-            }
-        });
+        // user = User.getCurrentUser(User.class);
+        // BmobQuery<Clock> bmobQuery = new BmobQuery<Clock>();
+        // bmobQuery.addWhereEqualTo("user", user);
+        // bmobQuery.findObjects(new FindListener<Clock>() {
+        //     @Override
+        //     public void done(List<Clock> list, BmobException e) {
+        //         if (e == null) {
+        //             Log.i("Clock", "查询到: " + list.size() + " 条数据");
+        //             for (Clock clock : list) {
+        //                 if (clock.getEnd_time() != null) {
+        //                     allTimes++;
+        //                     allDuration += clock.getDuration();
+        //                 }
+        //             }
+        //             Log.i("Clock", "番茄钟个数：" + allTimes);
+        //             Log.i("Clock", "累计时间： " + allDuration);
+        //         } else {
+        //
+        //         }
+        //     }
+        // });
 
         results.put("times", allTimes);
         results.put("duration", allDuration);

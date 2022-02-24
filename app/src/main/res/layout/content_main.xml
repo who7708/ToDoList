@@ -8,5 +8,4 @@
     tools:context=".Activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-
 </android.support.design.widget.CoordinatorLayout>

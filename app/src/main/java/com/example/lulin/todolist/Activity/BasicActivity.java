@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Receiver.NetworkReceiver;
 
-import cn.bmob.v3.Bmob;
+// import cn.bmob.v3.Bmob;
 import es.dmoral.toasty.Toasty;
 
 /**
@@ -23,8 +23,8 @@ public class BasicActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bmob.resetDomain("https://open3.bmob.cn/8/");
-        Bmob.initialize(getApplication(), APP_ID);
+        // Bmob.resetDomain("https://open3.bmob.cn/8/");
+        // Bmob.initialize(getApplication(), APP_ID);
         //注册网络状态监听广播
         networkReceiver = new NetworkReceiver();
         IntentFilter filter = new IntentFilter();

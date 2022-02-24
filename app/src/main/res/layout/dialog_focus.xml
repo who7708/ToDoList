@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:background="@drawable/layout_corner"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/title_dialog"
@@ -14,7 +14,7 @@
         android:background="@color/colorPrimary"
         android:text="专注模式设置"
         android:textSize="18sp"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
     <LinearLayout
         android:id="@+id/focus_dialog"
@@ -46,7 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="打开专注模式将阻止其他App打开"
-                    android:textSize="10sp"/>
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
@@ -56,7 +56,6 @@
                 android:layout_weight="1"
                 android:gravity="center">
 
-
                 <android.support.v7.widget.SwitchCompat
                     android:id="@+id/sw_focus"
                     android:layout_width="wrap_content"
@@ -64,8 +63,6 @@
                     android:checked="false" />
 
             </LinearLayout>
-
-
 
         </LinearLayout>
 
@@ -77,8 +74,6 @@
         android:layout_margin="10dp"
         android:layout_below="@+id/focus_dialog"
         android:text="@string/focus_explain"
-        android:textSize="13sp"/>
-
-
+        android:textSize="13sp" />
 
 </RelativeLayout>

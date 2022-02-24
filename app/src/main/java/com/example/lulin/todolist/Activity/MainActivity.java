@@ -1,11 +1,11 @@
 package com.example.lulin.todolist.Activity;
 
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -35,7 +35,6 @@ import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.hubert.guide.NewbieGuide;
 import com.app.hubert.guide.model.GuidePage;
@@ -43,14 +42,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
-import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
-import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Adapter.FragmentAdapter;
+import com.example.lulin.todolist.Bean.User;
+import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
 import com.example.lulin.todolist.Fragment.ClockFragment;
 import com.example.lulin.todolist.Fragment.TodoFragment;
+import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Utils.NetWorkUtils;
 import com.example.lulin.todolist.Utils.SPUtils;
-import com.example.lulin.todolist.Bean.User;
 import com.example.lulin.todolist.Widget.CircleImageView;
 import com.kekstudio.dachshundtablayout.DachshundTabLayout;
 import com.kekstudio.dachshundtablayout.indicators.DachshundIndicator;
@@ -59,24 +58,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.BmobUpdateListener;
-import cn.bmob.v3.listener.DownloadFileListener;
-import cn.bmob.v3.listener.FetchUserInfoListener;
-import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.update.BmobUpdateAgent;
-import cn.bmob.v3.update.UpdateResponse;
-import cn.bmob.v3.update.UpdateStatus;
-import es.dmoral.toasty.Toasty;
+// import cn.bmob.v3.BmobUser;
+// import cn.bmob.v3.datatype.BmobFile;
+// import cn.bmob.v3.exception.BmobException;
+// import cn.bmob.v3.listener.DownloadFileListener;
+// import cn.bmob.v3.update.BmobUpdateAgent;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import me.drakeet.materialdialog.MaterialDialog;
 import top.wefor.circularanim.CircularAnim;
-
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
-
 
 public class MainActivity extends BasicActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
@@ -85,7 +74,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
     private FloatingActionButton fab;
     private MyDatabaseHelper dbHelper;
     private CircleImageView user_image;
-    private TextView nick_name,autograph;
+    private TextView nick_name, autograph;
     public User local_user;
     private ImageView nav_bg;
     private String imgPath;
@@ -96,7 +85,6 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
     private UsageStatsManager usageStatsManager;
     private List<UsageStats> queryUsageStats;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         CircularAnim.init(400, 400, R.color.colorPrimary);
@@ -104,21 +92,20 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
         //设置状态栏
         setStatusBar();
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        ColorFilterToolBar toolbar = (ColorFilterToolBar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        //        ColorFilterToolBar toolbar = (ColorFilterToolBar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //Bmob云创建AppVersion表
-//        BmobUpdateAgent.initAppVersion();
+        //        BmobUpdateAgent.initAppVersion();
 
-        //是否仅在WIFI下检测更新
-        BmobUpdateAgent.setUpdateOnlyWifi(true);
+        // //是否仅在WIFI下检测更新
+        // BmobUpdateAgent.setUpdateOnlyWifi(true);
 
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
@@ -144,7 +131,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
 
@@ -158,18 +145,17 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
         dbHelper = new MyDatabaseHelper(this, "Data.db", null, 2);
         dbHelper.getWritableDatabase();
 
+        if (NetWorkUtils.isNetworkConnected(getApplication())) {
 
-        if (NetWorkUtils.isNetworkConnected(getApplication())){
-
-            if (User.getCurrentUser(User.class) != null){
-                try{
-                    setUserDataFromBmob();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-        }else {
+            // if (User.getCurrentUser(User.class) != null) {
+            //     try {
+            //         setUserDataFromBmob();
+            //     } catch (Exception e) {
+            //         e.printStackTrace();
+            //     }
+            //
+            // }
+        } else {
             glideLoad();
         }
 
@@ -178,14 +164,14 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
         initViewPager();
         initGuide();
         //检测更新
-        BmobUpdateAgent.update(this);
+        // BmobUpdateAgent.update(this);
 
     }
 
     /**
      * 用户引导
      */
-    private void initGuide(){
+    private void initGuide() {
         NewbieGuide.with(this)
                 .setLabel("guide1")
                 .setShowCounts(1)//控制次数
@@ -199,15 +185,14 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
 
     private void initView() {
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(this);
 
     }
 
     private void initViewPager() {
-        mTabLayout = (DachshundTabLayout) findViewById(R.id.tab_layout_main);
+        mTabLayout = findViewById(R.id.tab_layout_main);
         mViewPager = findViewById(R.id.view_pager_main);
-
 
         List<String> titles = new ArrayList<>();
         titles.add(getString(R.string.tab_title_main_1));
@@ -248,7 +233,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
                                     @Override
                                     public void onAnimationEnd() {
                                         Intent intent = new Intent(MainActivity.this, NewTodoActivity.class);
-                                        startActivityForResult(intent,1);
+                                        startActivityForResult(intent, 1);
                                     }
                                 });
                     }
@@ -276,7 +261,6 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
         }
     };
 
-
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -288,7 +272,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
                             @Override
                             public void onAnimationEnd() {
                                 Intent intent = new Intent(MainActivity.this, NewTodoActivity.class);
-                                startActivityForResult(intent,1);
+                                startActivityForResult(intent, 1);
                             }
                         });
 
@@ -300,17 +284,17 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
                         .go(new CircularAnim.OnAnimationEndListener() {
                             @Override
                             public void onAnimationEnd() {
-                                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                DrawerLayout drawer = findViewById(R.id.drawer_layout);
                                 drawer.closeDrawer(GravityCompat.START);
-                                if (NetWorkUtils.isNetworkConnected(getApplication())){
-                                    local_user = User.getCurrentUser(User.class);
+                                if (NetWorkUtils.isNetworkConnected(getApplication())) {
+                                    // local_user = User.getCurrentUser(User.class);
                                 }
-                                if (local_user != null){
+                                if (local_user != null) {
                                     Intent intent = new Intent(MainActivity.this, UserDataActivity.class);
                                     startActivityForResult(intent, 1);
                                 } else {
                                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                    startActivityForResult(intent,1);
+                                    startActivityForResult(intent, 1);
                                 }
                             }
                         });
@@ -323,17 +307,17 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
                         .go(new CircularAnim.OnAnimationEndListener() {
                             @Override
                             public void onAnimationEnd() {
-                                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                DrawerLayout drawer = findViewById(R.id.drawer_layout);
                                 drawer.closeDrawer(GravityCompat.START);
-                                if (NetWorkUtils.isNetworkConnected(getApplication())){
-                                    local_user = User.getCurrentUser(User.class);
+                                if (NetWorkUtils.isNetworkConnected(getApplication())) {
+                                    // local_user = User.getCurrentUser(User.class);
                                 }
-                                if (local_user != null){
+                                if (local_user != null) {
                                     Intent intent = new Intent(MainActivity.this, UserDataActivity.class);
                                     startActivityForResult(intent, 1);
                                 } else {
                                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                                    startActivityForResult(intent,1);
+                                    startActivityForResult(intent, 1);
                                 }
                             }
                         });
@@ -344,7 +328,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -369,11 +353,11 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivityForResult(intent,1);
+            startActivityForResult(intent, 1);
 
             return true;
         }
-        if (id == R.id.menu_focus){
+        if (id == R.id.menu_focus) {
             final MaterialDialog focusDialog = new MaterialDialog(MainActivity.this);
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             View view = layoutInflater.inflate(R.layout.dialog_focus, null);
@@ -383,9 +367,9 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
             isFocus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked){
-                        if (Build.VERSION.SDK_INT > 20){
-                            if (!isNoSwitch()){
+                    if (isChecked) {
+                        if (Build.VERSION.SDK_INT > 20) {
+                            if (!isNoSwitch()) {
                                 RequestPromission();
                             }
                         }
@@ -407,12 +391,10 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             mMenuItemIDLE = item;
             drawer.closeDrawer(GravityCompat.START);
         }
-
 
         return true;
     }
@@ -424,7 +406,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
      */
     private void runNavigationItemSelected(@NonNull MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
 
             case R.id.nav_todo:
                 mViewPager.setCurrentItem(0);
@@ -452,7 +434,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
             case R.id.nav_setting:
 
                 Intent intent2 = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivityForResult(intent2,1);
+                startActivityForResult(intent2, 1);
 
                 break;
         }
@@ -475,20 +457,19 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
         super.onResume();
     }
 
-
     //回调刷新
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == 2){
+        if (resultCode == 2) {
             finish();
             Intent intent = new Intent(MainActivity.this, MainActivity.class);
             startActivity(intent);
 
         }
-        if (resultCode ==3){
-            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+        if (resultCode == 3) {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
@@ -498,9 +479,9 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
     /**
      * 设置状态栏透明
      */
-    private void setStatusBar(){
+    private void setStatusBar() {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -516,89 +497,89 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
     /**
      * 从Bmob加载用户信息
      */
-    private void setUserDataFromBmob(){
-
-        User user = BmobUser.getCurrentUser(User.class);
-        nick_name.setText(user.getNickName());
-        autograph.setText(user.getAutograph());
-        BmobFile bmobFile = user.getImg();
-        bmobFile.download(new DownloadFileListener() {
-            @Override
-            public void done(String path, BmobException e) {
-                if(e==null){
-                    Log.i("MainActivity", "保存路径: " + path);
-                    imgPath = path;
-                    SPUtils.put(MainActivity.this, "path", imgPath);
-                    glideLoad();
-                }else{
-                    Log.i("MainActivity", "下载失败");
-                }
-            }
-
-            @Override
-            public void onProgress(Integer integer, long l) {
-
-            }
-        });
-//        User user = User.getCurrentUser(User.class);
-//        BmobQuery<User> bmobQuery = new BmobQuery();
-//        bmobQuery.getObject(user.getObjectId(), new QueryListener<User>() {
-//            @Override
-//            public void done(final User user, BmobException e) {
-//                nick_name.setText(user.getNickName());
-//                autograph.setText(user.getAutograph());
-//                BmobFile bmobFile = user.getImg();
-//                bmobFile.download(new DownloadFileListener() {
-//                    @Override
-//                    public void done(String path, BmobException e) {
-//                        if(e==null){
-//                            Log.i("MainActivity", "保存路径: " + path);
-//                            imgPath = path;
-//                            SPUtils.put(MainActivity.this, "path", imgPath);
-//                            glideLoad();
-//                        }else{
-//                            Log.i("MainActivity", "下载失败");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onProgress(Integer integer, long l) {
-//
-//                    }
-//                });
-//
-//            }
-//        });
-    }
+    // private void setUserDataFromBmob() {
+    //
+    //     User user = BmobUser.getCurrentUser(User.class);
+    //     nick_name.setText(user.getNickName());
+    //     autograph.setText(user.getAutograph());
+    //     BmobFile bmobFile = user.getImg();
+    //     bmobFile.download(new DownloadFileListener() {
+    //         @Override
+    //         public void done(String path, BmobException e) {
+    //             if (e == null) {
+    //                 Log.i("MainActivity", "保存路径: " + path);
+    //                 imgPath = path;
+    //                 SPUtils.put(MainActivity.this, "path", imgPath);
+    //                 glideLoad();
+    //             } else {
+    //                 Log.i("MainActivity", "下载失败");
+    //             }
+    //         }
+    //
+    //         @Override
+    //         public void onProgress(Integer integer, long l) {
+    //
+    //         }
+    //     });
+    //     //        User user = User.getCurrentUser(User.class);
+    //     //        BmobQuery<User> bmobQuery = new BmobQuery();
+    //     //        bmobQuery.getObject(user.getObjectId(), new QueryListener<User>() {
+    //     //            @Override
+    //     //            public void done(final User user, BmobException e) {
+    //     //                nick_name.setText(user.getNickName());
+    //     //                autograph.setText(user.getAutograph());
+    //     //                BmobFile bmobFile = user.getImg();
+    //     //                bmobFile.download(new DownloadFileListener() {
+    //     //                    @Override
+    //     //                    public void done(String path, BmobException e) {
+    //     //                        if(e==null){
+    //     //                            Log.i("MainActivity", "保存路径: " + path);
+    //     //                            imgPath = path;
+    //     //                            SPUtils.put(MainActivity.this, "path", imgPath);
+    //     //                            glideLoad();
+    //     //                        }else{
+    //     //                            Log.i("MainActivity", "下载失败");
+    //     //                        }
+    //     //                    }
+    //     //
+    //     //                    @Override
+    //     //                    public void onProgress(Integer integer, long l) {
+    //     //
+    //     //                    }
+    //     //                });
+    //     //
+    //     //            }
+    //     //        });
+    // }
 
     /**
      * Glide图片加载
      */
-    private void glideLoad(){
+    private void glideLoad() {
 
         RequestOptions options1 = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .signature(new ObjectKey(SPUtils.get(MainActivity.this,"head_signature","")))
+                .signature(new ObjectKey(SPUtils.get(MainActivity.this, "head_signature", "")))
                 .placeholder(R.drawable.default_photo);
 
-        RequestOptions options2 =new RequestOptions()
+        RequestOptions options2 = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .signature(new ObjectKey(SPUtils.get(MainActivity.this,"head_signature","")))
+                .signature(new ObjectKey(SPUtils.get(MainActivity.this, "head_signature", "")))
                 .placeholder(R.drawable.ic_img1);
 
         Glide.with(getApplicationContext())
-                .load(SPUtils.get(MainActivity.this, "path" ,""))
+                .load(SPUtils.get(MainActivity.this, "path", ""))
                 .apply(options1)
                 .into(user_image);
 
         Glide.with(getApplicationContext())
-                .load(SPUtils.get(MainActivity.this, "path" ,""))
+                .load(SPUtils.get(MainActivity.this, "path", ""))
                 .apply(bitmapTransform(new BlurTransformation(25, 3)))
                 .apply(options2)
                 .into(nav_bg);
     }
 
-    public boolean getIsFocus(Context context){
+    public boolean getIsFocus(Context context) {
 
         Boolean isFocus = (Boolean) SPUtils.get(context, KEY_FOCUS, false);
 
@@ -608,20 +589,21 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
 
     /**
      * 判断“查看应用使用情况”是否开启
+     *
      * @return
      */
     private boolean isNoSwitch() {
         long ts = System.currentTimeMillis();
-        if(Build.VERSION.SDK_INT >=21){
+        if (Build.VERSION.SDK_INT >= 21) {
             //noinspection ResourceType
-            usageStatsManager = (UsageStatsManager)this.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
+            usageStatsManager = (UsageStatsManager) this.getApplicationContext().getSystemService(Context.USAGE_STATS_SERVICE);
             queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, 0, ts);
         }
 
-        if ( queryUsageStats == null || queryUsageStats.isEmpty()) {
+        if (queryUsageStats == null || queryUsageStats.isEmpty()) {
             return false;
         }
-        if(Build.VERSION.SDK_INT > 23){
+        if (Build.VERSION.SDK_INT > 23) {
             return Settings.canDrawOverlays(this);
         }
 
@@ -635,7 +617,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
 
         final MaterialDialog dialog = new MaterialDialog(this);
         dialog.setTitle("提示")
-                .setMessage(String.format(Locale.US,"打开专注模式请允App查看应用的使用情况。"))
+                .setMessage(String.format(Locale.US, "打开专注模式请允App查看应用的使用情况。"))
                 .setPositiveButton("开启", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -649,11 +631,11 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
     }
 
     public void RequestCanDrawPromission() {
-        if(Build.VERSION.SDK_INT > 23){
+        if (Build.VERSION.SDK_INT > 23) {
             if (!Settings.canDrawOverlays(this)) {
                 final MaterialDialog dialog = new MaterialDialog(this);
                 dialog.setTitle("提示")
-                        .setMessage(String.format(Locale.US,"打开专注模式请允App使用悬浮窗权限。"))
+                        .setMessage(String.format(Locale.US, "打开专注模式请允App使用悬浮窗权限。"))
                         .setPositiveButton("开启", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -673,7 +655,7 @@ public class MainActivity extends BasicActivity implements NavigationView.OnNavi
      * 动态权限申请
      */
     private void initPermission() {
-        String permission[] = { Manifest.permission.RECORD_AUDIO,
+        String permission[] = {Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.ACCESS_NETWORK_STATE,
                 Manifest.permission.INTERNET,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,

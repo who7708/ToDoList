@@ -32,9 +32,9 @@ import com.example.lulin.todolist.Bean.User;
 import java.util.List;
 import java.util.Locale;
 
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.UpdateListener;
+// import cn.bmob.v3.BmobUser;
+// import cn.bmob.v3.exception.BmobException;
+// import cn.bmob.v3.listener.UpdateListener;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -114,7 +114,9 @@ public class SettingsFragment extends PreferenceFragment {
         mChangePassWord.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                if (User.getCurrentUser(User.class)==null){
+                User user = null;
+                // User.getCurrentUser(User.class)
+                if (user==null){
                     ToastUtils.showShort(getActivity(),"未登录");
                     Toasty.error(getActivity(), "账号或密码不正确", Toast.LENGTH_SHORT, true).show();
                 } else {
@@ -130,22 +132,22 @@ public class SettingsFragment extends PreferenceFragment {
                         public void onClick(View view) {
                             String old_pwd = oldPwd.getText().toString();
                             String new_pwd = newPwd.getText().toString();
-                            BmobUser.updateCurrentUserPassword(old_pwd, new_pwd, new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if(e==null){
-                                        Toasty.success(getActivity(), "修改成功", Toast.LENGTH_SHORT, true).show();
-                                        BmobUser.logOut();   //清除缓存用户对象
-                                        Log.i(TAG, "成功");
-                                        Intent intent = new Intent(getActivity(), MainActivity.class);
-                                        getActivity().setResult(3,intent);
-                                        getActivity().finish();
-                                    }else{
-                                        Log.i(TAG, "done: 失败"+e.getMessage());
-                                        Toasty.error(getActivity(), "修改失败", Toast.LENGTH_SHORT, true).show();
-                                    }
-                                }
-                            });
+                            // BmobUser.updateCurrentUserPassword(old_pwd, new_pwd, new UpdateListener() {
+                            //     @Override
+                            //     public void done(BmobException e) {
+                            //         if(e==null){
+                            //             Toasty.success(getActivity(), "修改成功", Toast.LENGTH_SHORT, true).show();
+                            //             BmobUser.logOut();   //清除缓存用户对象
+                            //             Log.i(TAG, "成功");
+                            //             Intent intent = new Intent(getActivity(), MainActivity.class);
+                            //             getActivity().setResult(3,intent);
+                            //             getActivity().finish();
+                            //         }else{
+                            //             Log.i(TAG, "done: 失败"+e.getMessage());
+                            //             Toasty.error(getActivity(), "修改失败", Toast.LENGTH_SHORT, true).show();
+                            //         }
+                            //     }
+                            // });
                         }
                     });
                     resetDialog.setNegativeButton("取消", new View.OnClickListener() {
@@ -169,7 +171,7 @@ public class SettingsFragment extends PreferenceFragment {
                         .setPositiveButton("确定", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                BmobUser.logOut();   //清除缓存用户对象
+                                // BmobUser.logOut();   //清除缓存用户对象
                                 SPUtils.put(getActivity(),"sync",false);
                                 Log.i(TAG, "注销成功");
                                 Intent intent = new Intent(getActivity(), MainActivity.class);

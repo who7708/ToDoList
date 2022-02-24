@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/middle_layout"
     android:layout_width="match_parent"
@@ -34,15 +33,14 @@
                 android:textSize="17sp" />
 
             <!--<Button-->
-                <!--android:id="@+id/exit_login"-->
-                <!--android:layout_width="32dp"-->
-                <!--android:layout_height="32dp"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_alignParentEnd="true"-->
-                <!--android:layout_marginEnd="10dp"-->
-                <!--android:background="@drawable/exit"-->
-                <!--android:gravity="right" />-->
-
+            <!--android:id="@+id/exit_login"-->
+            <!--android:layout_width="32dp"-->
+            <!--android:layout_height="32dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_marginEnd="10dp"-->
+            <!--android:background="@drawable/exit"-->
+            <!--android:gravity="right" />-->
 
         </RelativeLayout>
 
@@ -65,29 +63,27 @@
 
         </RelativeLayout>
 
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/half_black" />
 
         <!--<com.kekstudio.dachshundtablayout.DachshundTabLayout-->
-            <!--android:id="@+id/tab_layout_user"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@android:color/white"-->
-            <!--app:tabTextColor="@color/half_black"-->
-            <!--app:tabSelectedTextColor="@color/black_semi"-->
-            <!--app:ddIndicatorColor="@color/half_black"-->
-            <!--app:ddIndicatorHeight="5dp"/>-->
+        <!--android:id="@+id/tab_layout_user"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:color/white"-->
+        <!--app:tabTextColor="@color/half_black"-->
+        <!--app:tabSelectedTextColor="@color/black_semi"-->
+        <!--app:ddIndicatorColor="@color/half_black"-->
+        <!--app:ddIndicatorHeight="5dp"/>-->
 
         <!--<android.support.v4.view.ViewPager-->
-            <!--android:id="@+id/view_pager_user"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
+        <!--android:id="@+id/view_pager_user"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior" />-->
 
     </LinearLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

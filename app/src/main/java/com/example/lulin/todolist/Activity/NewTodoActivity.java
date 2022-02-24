@@ -3,20 +3,19 @@ package com.example.lulin.todolist.Activity;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
-import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,13 +25,11 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import com.baidu.speech.EventListener;
 import com.baidu.speech.EventManager;
@@ -40,18 +37,15 @@ import com.baidu.speech.EventManagerFactory;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.lulin.todolist.Bean.App;
 import com.example.lulin.todolist.Bean.BaiDuVoice;
-import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
+import com.example.lulin.todolist.Bean.Todos;
+import com.example.lulin.todolist.Bean.User;
 import com.example.lulin.todolist.Dao.ToDoDao;
 import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Service.AlarmService;
 import com.example.lulin.todolist.Utils.NetWorkUtils;
 import com.example.lulin.todolist.Utils.PermissionPageUtils;
 import com.example.lulin.todolist.Utils.SPUtils;
-import com.example.lulin.todolist.Utils.ToastUtils;
-import com.example.lulin.todolist.Bean.Todos;
-import com.example.lulin.todolist.Bean.User;
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.google.gson.Gson;
 import com.lai.library.ButtonStyle;
@@ -66,13 +60,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobDate;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
+// import cn.bmob.v3.BmobUser;
+// import cn.bmob.v3.datatype.BmobDate;
+// import cn.bmob.v3.exception.BmobException;
+// import cn.bmob.v3.listener.SaveListener;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
-
 
 /**
  * 新建待办事项类
@@ -80,14 +73,14 @@ import me.drakeet.materialdialog.MaterialDialog;
  */
 public class NewTodoActivity extends BasicActivity implements EventListener {
 
-    private String todoTitle,todoDsc;
+    private String todoTitle, todoDsc;
     private String todoDate = null, todoTime = null;
     private FloatingActionButton fab_ok;
-    private TextView nv_todo_date,nv_todo_time,voice_result;
-    private EditText nv_todo_title,nv_todo_dsc;
+    private TextView nv_todo_date, nv_todo_time, voice_result;
+    private EditText nv_todo_title, nv_todo_dsc;
     private Switch nv_repeat;
-    private int mYear,mMonth,mDay;//当前日期
-    private int mHour,mMin;//当前时间
+    private int mYear, mMonth, mDay;//当前日期
+    private int mHour, mMin;//当前时间
     private long remindTime;
     private Calendar ca;
     private static final String TAG = "time";
@@ -109,17 +102,17 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
     private ButtonStyle done;
     private PermissionPageUtils permissionPageUtils;
 
-    private int[] data={
-            0,0,0,0,1,0,0,0,18,19,
-            21,18,9,9,16,20,18,11,17,13,
-            17,12,16,16,20,16,5,1,0,4,
-            16,17,9,16,20,11,6,16,16,11,
-            6,14,16,8,5,13,13,6,2,16,
-            18,12,7,13,15,13,4,1,18,15,
-            7,3,14,13,6,4,12,10,15,12,
-            1,1,15,20,0,3,10,1,8,17};
+    private int[] data = {
+            0, 0, 0, 0, 1, 0, 0, 0, 18, 19,
+            21, 18, 9, 9, 16, 20, 18, 11, 17, 13,
+            17, 12, 16, 16, 20, 16, 5, 1, 0, 4,
+            16, 17, 9, 16, 20, 11, 6, 16, 16, 11,
+            6, 14, 16, 8, 5, 13, 13, 6, 2, 16,
+            18, 12, 7, 13, 15, 13, 4, 1, 18, 15,
+            7, 3, 14, 13, 6, 4, 12, 10, 15, 12,
+            1, 1, 15, 20, 0, 3, 10, 1, 8, 17};
     private VoiceAnimator voiceAnimator;
-    private Button mic_title,mic_dsc;
+    private Button mic_title, mic_dsc;
     private boolean enableOffline = true;
     private EventManager manager;
     private int flag = 0;
@@ -129,7 +122,7 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         super.onCreate(savedInstanceState);
         setStatusBar();
         setContentView(R.layout.activity_new_todo);
-        toolbar = (Toolbar) findViewById(R.id.new_toolbar);
+        toolbar = findViewById(R.id.new_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -143,7 +136,7 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         checkNotificationPermission();
     }
 
-    private void initHeadImage(){
+    private void initHeadImage() {
 
         Random random = new Random();
         imgId = imageArray[random.nextInt(8)];
@@ -156,10 +149,11 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
                 .into(new_bg);
 
     }
+
     /**
      * 获取日期
      */
-    private void getDate(){
+    private void getDate() {
 
         mYear = ca.get(Calendar.YEAR);
         mMonth = ca.get(Calendar.MONTH);
@@ -169,30 +163,30 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
     /**
      * 获取时间
      */
-    private void getTime(){
+    private void getTime() {
         mHour = ca.get(Calendar.HOUR_OF_DAY);
         mMin = ca.get(Calendar.MINUTE);
     }
 
     private void initView() {
 
-        fab_ok = (FloatingActionButton) findViewById(R.id.fab_ok);
-        nv_todo_title = (EditText) findViewById(R.id.new_todo_title);
-        nv_todo_dsc = (EditText) findViewById(R.id.new_todo_dsc);
-        nv_todo_date = (TextView) findViewById(R.id.new_todo_date);
-        nv_todo_time = (TextView) findViewById(R.id.new_todo_time);
-        nv_repeat = (Switch) findViewById(R.id.repeat);
-        new_bg = (ImageView) findViewById(R.id.new_bg);
-        fabProgressCircle = (FABProgressCircle) findViewById(R.id.fabProgressCircle);
-        mic_title = (Button) findViewById(R.id.mic_title);
-        mic_dsc = (Button) findViewById(R.id.mic_dsc);
+        fab_ok = findViewById(R.id.fab_ok);
+        nv_todo_title = findViewById(R.id.new_todo_title);
+        nv_todo_dsc = findViewById(R.id.new_todo_dsc);
+        nv_todo_date = findViewById(R.id.new_todo_date);
+        nv_todo_time = findViewById(R.id.new_todo_time);
+        nv_repeat = findViewById(R.id.repeat);
+        new_bg = findViewById(R.id.new_bg);
+        fabProgressCircle = findViewById(R.id.fabProgressCircle);
+        mic_title = findViewById(R.id.mic_title);
+        mic_dsc = findViewById(R.id.mic_dsc);
 
         fab_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (todoDate==null){
+                if (todoDate == null) {
                     Toasty.info(NewTodoActivity.this, "没有设置日期", Toast.LENGTH_SHORT, true).show();
-                } else if (todoTime==null) {
+                } else if (todoTime == null) {
                     Toasty.info(NewTodoActivity.this, "没有设置提醒时间", Toast.LENGTH_SHORT, true).show();
 
                 } else {
@@ -208,11 +202,11 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
                     calendarTime.set(Calendar.MINUTE, mMin);
                     calendarTime.set(Calendar.SECOND, 0);
                     remindTime = calendarTime.getTimeInMillis();
-                    Log.i(TAG, "时间是"+String.valueOf(remindTime));
+                    Log.i(TAG, "时间是" + String.valueOf(remindTime));
                     //插入数据
-                    User user = BmobUser.getCurrentUser(User.class);
+                    // User user = BmobUser.getCurrentUser(User.class);
                     todos = new Todos();
-                    todos.setUser(user);
+                    // todos.setUser(user);
                     todos.setTitle(todoTitle);
                     todos.setDesc(todoDsc);
                     todos.setDate(todoDate);
@@ -222,40 +216,40 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
                     todos.setIsRepeat(isRepeat);
                     todos.setImgId(imgId);
                     Date date = new Date(remindTime);
-                    BmobDate bmobDate = new BmobDate(date);
-                    todos.setBmobDate(bmobDate);
+                    // BmobDate bmobDate = new BmobDate(date);
+                    // todos.setBmobDate(bmobDate);
 
-                    boolean isSync = (Boolean) SPUtils.get(getApplication(),"sync",true);
+                    boolean isSync = (Boolean) SPUtils.get(getApplication(), "sync", true);
                     Log.i("ToDo", "isSync: " + isSync);
 
-                    if (isSync){
-                        //保存数据到Bmob
-                        if(NetWorkUtils.isNetworkConnected(getApplication()) && User.getCurrentUser(User.class)!= null){
-                            todos.save(new SaveListener<String>() {
-                                @Override
-                                public void done(String s, BmobException e) {
-                                    if(e==null){
-                                        //插入本地数据库
-                                        new ToDoDao(getApplicationContext()).create(todos);
-                                        Log.i("bmob","保存到Bmob成功 "+ todos.getObjectId());
-                                        Log.i("bmob","保存到本地数据库成功 "+ todos.getObjectId());
-//                                        Intent intent = new Intent(NewTodoActivity.this, MainActivity.class);
-//                                        setResult(2, intent);
-                                        startService(new Intent(NewTodoActivity.this, AlarmService.class));
-                                        finish();
-                                    }else{
-                                        Log.i("bmob","保存到Bmob失败："+e.getMessage());
-                                    }
-                                }
-                            });
-
-                        } else {
-                            Toasty.info(NewTodoActivity.this, "请先登录", Toast.LENGTH_SHORT, true).show();
-                        }
+                    if (isSync) {
+                        // //保存数据到Bmob
+                        // if (NetWorkUtils.isNetworkConnected(getApplication()) && User.getCurrentUser(User.class) != null) {
+                        //     todos.save(new SaveListener<String>() {
+                        //         @Override
+                        //         public void done(String s, BmobException e) {
+                        //             if (e == null) {
+                        //                 //插入本地数据库
+                        //                 new ToDoDao(getApplicationContext()).create(todos);
+                        //                 Log.i("bmob", "保存到Bmob成功 " + todos.getObjectId());
+                        //                 Log.i("bmob", "保存到本地数据库成功 " + todos.getObjectId());
+                        //                 //                                        Intent intent = new Intent(NewTodoActivity.this, MainActivity.class);
+                        //                 //                                        setResult(2, intent);
+                        //                 startService(new Intent(NewTodoActivity.this, AlarmService.class));
+                        //                 finish();
+                        //             } else {
+                        //                 Log.i("bmob", "保存到Bmob失败：" + e.getMessage());
+                        //             }
+                        //         }
+                        //     });
+                        //
+                        // } else {
+                        //     Toasty.info(NewTodoActivity.this, "请先登录", Toast.LENGTH_SHORT, true).show();
+                        // }
                     } else {
                         new ToDoDao(getApplicationContext()).create(todos);
-//                        Intent intent = new Intent(NewTodoActivity.this, MainActivity.class);
-//                        setResult(2, intent);
+                        //                        Intent intent = new Intent(NewTodoActivity.this, MainActivity.class);
+                        //                        setResult(2, intent);
                         startService(new Intent(NewTodoActivity.this, AlarmService.class));
                         finish();
                     }
@@ -264,7 +258,6 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
 
             }
         });
-
 
         nv_todo_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,7 +275,7 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
             @Override
             public void onClick(View view) {
 
-                TimePickerDialog timePickerDialog = new TimePickerDialog(NewTodoActivity.this, onTimeSetListener, mHour,mMin, true);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(NewTodoActivity.this, onTimeSetListener, mHour, mMin, true);
                 timePickerDialog.setCancelable(true);
                 timePickerDialog.setCanceledOnTouchOutside(true);
                 timePickerDialog.show();
@@ -299,7 +292,7 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         nv_repeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     isRepeat = 1;
                 } else {
                     isRepeat = 0;
@@ -333,15 +326,15 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
      */
     public DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                mYear = year;
-                mMonth = monthOfYear;
-                mDay = dayOfMonth;
-                todoDate = year+ "年"+(monthOfYear + 1) + "月" + dayOfMonth + "日";
-                nv_todo_date.setText(todoDate);
-            }
-        };
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            mYear = year;
+            mMonth = monthOfYear;
+            mDay = dayOfMonth;
+            todoDate = year + "年" + (monthOfYear + 1) + "月" + dayOfMonth + "日";
+            nv_todo_date.setText(todoDate);
+        }
+    };
 
     /**
      * 时间选择对话框监听
@@ -351,7 +344,7 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         public void onTimeSet(TimePicker timePicker, int hour, int minute) {
             mHour = hour;
             mMin = minute;
-            if (minute < 10){
+            if (minute < 10) {
                 todoTime = hour + ":" + "0" + minute;
             } else {
                 todoTime = hour + ":" + minute;
@@ -367,17 +360,14 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         manager.registerListener(this);
     }
 
-
-
     /*启动*/
     private void start() {
-
 
         Map<String, Object> params1 = new LinkedHashMap<>();
         String event = null;
         //开启录音
         event = com.baidu.speech.asr.SpeechConstant.ASR_START;
-//        params1.put(com.baidu.speech.asr.SpeechConstant.APP_NAME, "");
+        //        params1.put(com.baidu.speech.asr.SpeechConstant.APP_NAME, "");
         //音量数据回调开启
         params1.put(com.baidu.speech.asr.SpeechConstant.ACCEPT_AUDIO_VOLUME, false);
         //活动语音检测
@@ -386,12 +376,12 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         params1.put(com.baidu.speech.asr.SpeechConstant.VAD_ENDPOINT_TIMEOUT, 0);
         if (enableOffline) {
             //离线在线并行策略
-//            params1.put(com.baidu.speech.asr.SpeechConstant.DECODER, 2);
+            //            params1.put(com.baidu.speech.asr.SpeechConstant.DECODER, 2);
         }
         //开启语音音频数据回调
         params1.put(com.baidu.speech.asr.SpeechConstant.ACCEPT_AUDIO_DATA, true);
         //设置文件回调
-//        params1.put(com.baidu.speech.asr.SpeechConstant.IN_FILE, Environment.getExternalStorageDirectory() + "/msc/baidu.wav");
+        //        params1.put(com.baidu.speech.asr.SpeechConstant.IN_FILE, Environment.getExternalStorageDirectory() + "/msc/baidu.wav");
         //保存文件
         params1.put(com.baidu.speech.asr.SpeechConstant.OUT_FILE, Environment.getExternalStorageDirectory() + "/msc/baidu.wav");
 
@@ -420,9 +410,9 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
                 Gson gson = new Gson();
                 BaiDuVoice voice = gson.fromJson(jsonstr, BaiDuVoice.class);
                 Log.i(TAG, "BaiDuBean:" + jsonstr + "\n=========" + voice.toString());
-                if (flag == R.id.mic_title){
+                if (flag == R.id.mic_title) {
                     nv_todo_title.setText(voice.best_result);
-                } else if (flag == R.id.mic_dsc){
+                } else if (flag == R.id.mic_dsc) {
                     nv_todo_dsc.setText(voice.best_result);
                 }
                 voice_result.setText(voice.best_result);
@@ -439,7 +429,7 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         }
     }
 
-    private void showVoiceDialog(){
+    private void showVoiceDialog() {
         voice = new MaterialDialog(NewTodoActivity.this);
         LayoutInflater layoutInflater = LayoutInflater.from(NewTodoActivity.this);
         View view = layoutInflater.inflate(R.layout.dialog_voice, null);
@@ -457,7 +447,7 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
             @Override
             public void run() {
 
-                while(true){
+                while (true) {
                     for (int aData : data) {
                         voiceAnimator.setValue((aData) / 20f);
                         try {
@@ -472,7 +462,6 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         voice.setContentView(view);
         voice.show();
     }
-
 
     /*动态权限申请*/
     private void initPermission() {
@@ -503,9 +492,9 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         finish();
     }
 
-    private void setStatusBar(){
+    private void setStatusBar() {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -518,12 +507,12 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
         }
     }
 
-    private void checkNotificationPermission(){
+    private void checkNotificationPermission() {
         NotificationManagerCompat manager = NotificationManagerCompat.from(getApplication());
         boolean isOpened = manager.areNotificationsEnabled();
         permissionPageUtils = new PermissionPageUtils(this);
         //适配方式 1
-        if (!isOpened){
+        if (!isOpened) {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 final MaterialDialog check = new MaterialDialog(this);
                 check.setTitle("提示");
@@ -561,20 +550,20 @@ public class NewTodoActivity extends BasicActivity implements EventListener {
                 check.show();
             }
         }
-//        //适配方式 2
-//        if (!isOpened){
-//            final MaterialDialog check = new MaterialDialog(this);
-//            check.setTitle("提示");
-//            check.setMessage("未开启“通知”权限，将会影响待办提醒功能，请手动开启");
-//            check.setPositiveButton("去开启", new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    permissionPageUtils.jumpPermissionPage();
-//                    check.dismiss();
-//                }
-//            });
-//            check.setCanceledOnTouchOutside(true);
-//            check.show();
-//        }
+        //        //适配方式 2
+        //        if (!isOpened){
+        //            final MaterialDialog check = new MaterialDialog(this);
+        //            check.setTitle("提示");
+        //            check.setMessage("未开启“通知”权限，将会影响待办提醒功能，请手动开启");
+        //            check.setPositiveButton("去开启", new View.OnClickListener() {
+        //                @Override
+        //                public void onClick(View v) {
+        //                    permissionPageUtils.jumpPermissionPage();
+        //                    check.dismiss();
+        //                }
+        //            });
+        //            check.setCanceledOnTouchOutside(true);
+        //            check.show();
+        //        }
     }
 }

@@ -7,14 +7,14 @@
     android:paddingEnd="10dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="修改密码"
         android:textSize="20sp"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
     <EditText
         android:id="@+id/old_pwd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
     </EditText>
 
@@ -38,6 +38,5 @@
         android:id="@+id/new_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
 </LinearLayout>

@@ -7,7 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import cn.bmob.v3.Bmob;
+// import cn.bmob.v3.Bmob;
 
 public class NetworkReceiver extends BroadcastReceiver {
 
@@ -20,8 +20,8 @@ public class NetworkReceiver extends BroadcastReceiver {
         NetworkInfo info = connectivityManager.getActiveNetworkInfo();
         if ( info != null && info.isAvailable()){
             //当前网络状态可用
-            Bmob.resetDomain("https://open3.bmob.cn/8/");
-            Bmob.initialize(context, APP_ID);
+            // Bmob.resetDomain("https://open3.bmob.cn/8/");
+            // Bmob.initialize(context, APP_ID);
             Log.i("网络状态", "网络已连接");
         }else {
             //当前网络不可用

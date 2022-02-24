@@ -18,28 +18,25 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
-import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Activity.ClockActivity;
-import com.example.lulin.todolist.Dao.ClockDao;
 import com.example.lulin.todolist.Bean.Clock;
+import com.example.lulin.todolist.Bean.User;
+import com.example.lulin.todolist.Dao.ClockDao;
+import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Utils.CountDownTimer;
 import com.example.lulin.todolist.Utils.NetWorkUtils;
-import com.example.lulin.todolist.Utils.SPUtils;
 import com.example.lulin.todolist.Utils.Sound;
 import com.example.lulin.todolist.Utils.TimeFormatUtil;
-import com.example.lulin.todolist.Bean.User;
 import com.example.lulin.todolist.Utils.WakeLockHelper;
 import com.example.lulin.todolist.Widget.ClockApplication;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
+// import cn.bmob.v3.exception.BmobException;
+// import cn.bmob.v3.listener.SaveListener;
+// import cn.bmob.v3.listener.UpdateListener;
 
 public class ClockService extends Service implements CountDownTimer.OnCountDownTickListener {
     public static final String ACTION_COUNTDOWN_TIMER =
@@ -74,7 +71,7 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
     private String clockTitle;
     private Clock clock;
     private User user;
-    private int workLength, shortBreak,longBreak;
+    private int workLength, shortBreak, longBreak;
     private String CHANNEL_ONE_ID = "clock";
     private String CHANNEL_ONE_NAME = "Clock Notification";
 
@@ -99,7 +96,7 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
     @Override
     public void onCreate() {
         super.onCreate();
-        mApplication = (ClockApplication)getApplication();
+        mApplication = (ClockApplication) getApplication();
         mWakeLockHelper = new WakeLockHelper(WAKELOCK_ID);
         mDBAdapter = new ClockDao(getApplicationContext());
         mSound = new Sound(getApplicationContext());
@@ -153,9 +150,9 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
                         // 插入数据
                         mDBAdapter.open();
                         mID = mDBAdapter.insert(mTimer.getStartTime(),
-                                mTimer.getMinutesInFuture(),clockTitle);
-                        if(NetWorkUtils.isNetworkConnected(getApplication())) {
-                            user = User.getCurrentUser(User.class);
+                                mTimer.getMinutesInFuture(), clockTitle);
+                        if (NetWorkUtils.isNetworkConnected(getApplication())) {
+                            // user = User.getCurrentUser(User.class);
                         }
                         clock = new Clock();
                         clock.setUser(user);
@@ -277,35 +274,35 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
                 mDBAdapter.close();
                 clock.setEnd_time(ClockDao.formatDateTime(new Date()));
 
-                if(NetWorkUtils.isNetworkConnected(getApplication()) || User.getCurrentUser(User.class)!= null){
-                clock.save(new SaveListener<String>() {
-                    @Override
-                    public void done(String s, BmobException e) {
-                        if (e==null){
-                            Log.i("ClockService", "保存番茄钟到bmob成功");
-                            user.increment("total", (int) SPUtils
-                                    .get(getApplication(),"pref_key_work_length", ClockApplication.DEFAULT_WORK_LENGTH));
-                            user.update(new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if (e==null){
-                                        Log.i("ClockService", "番茄钟累计时间增加成功");
-                                    } else {
-                                        Log.i("ClockService", "番茄钟累计时间增加失败");
-                                    }
-                                }
-                            });
-                        } else {
-                            Log.i("ClockService", "保存番茄钟到bmob失败: " + e.getMessage());
-                        }
-                    }
-                });
-                }
+                // if (NetWorkUtils.isNetworkConnected(getApplication()) || User.getCurrentUser(User.class) != null) {
+                //     clock.save(new SaveListener<String>() {
+                //         @Override
+                //         public void done(String s, BmobException e) {
+                //             if (e == null) {
+                //                 Log.i("ClockService", "保存番茄钟到bmob成功");
+                //                 user.increment("total", (int) SPUtils
+                //                         .get(getApplication(), "pref_key_work_length", ClockApplication.DEFAULT_WORK_LENGTH));
+                //                 user.update(new UpdateListener() {
+                //                     @Override
+                //                     public void done(BmobException e) {
+                //                         if (e == null) {
+                //                             Log.i("ClockService", "番茄钟累计时间增加成功");
+                //                         } else {
+                //                             Log.i("ClockService", "番茄钟累计时间增加失败");
+                //                         }
+                //                     }
+                //                 });
+                //             } else {
+                //                 Log.i("ClockService", "保存番茄钟到bmob失败: " + e.getMessage());
+                //             }
+                //         }
+                //     });
+                // }
 
                 if (success) {
                     long amountDurations =
                             PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                            .getLong("pref_key_amount_durations", 0);
+                                    .getLong("pref_key_amount_durations", 0);
 
                     SharedPreferences.Editor editor =
                             PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
@@ -342,7 +339,7 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
             if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                     .getBoolean("pref_key_notification_vibrate", true)) {
                 defaults |= Notification.DEFAULT_VIBRATE;
-                builder.setVibrate(new long[] {0, 1000});
+                builder.setVibrate(new long[]{0, 1000});
             }
 
             builder.setDefaults(defaults);
@@ -357,8 +354,8 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
 
         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                 .getBoolean("pref_key_infinity_mode", false)) {
-//            Intent i = ClockService.newIntent(getApplicationContext());
-            Intent i = new Intent(getBaseContext(),ClockActivity.class);
+            //            Intent i = ClockService.newIntent(getApplicationContext());
+            Intent i = new Intent(getBaseContext(), ClockActivity.class);
             i.setAction(ACTION_AUTO_START);
 
             PendingIntent pi = PendingIntent.getService(getApplicationContext(), 0, i, 0);
@@ -397,8 +394,8 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
     }
 
     private Notification.Builder getNotification(String title, String text) {
-//        Intent intent = ClockActivity.newIntent(getApplicationContext());
-        Intent intent = new Intent(getBaseContext(),ClockActivity.class);
+        //        Intent intent = ClockActivity.newIntent(getApplicationContext());
+        Intent intent = new Intent(getBaseContext(), ClockActivity.class);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
 
@@ -409,14 +406,13 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
                 .setContentText(text)
                 .setContentIntent(pi);
 
-
         // 兼容  API 26，Android 8.0
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // 第三个参数表示通知的重要程度，默认则只在通知栏闪烁一下
             NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ONE_ID, CHANNEL_ONE_NAME, NotificationManager.IMPORTANCE_LOW);
             // 注册通道，注册后除非卸载再安装否则不改变
             notificationManager.createNotificationChannel(notificationChannel);
-            notificationChannel.setSound(null,null);
+            notificationChannel.setSound(null, null);
             builder.setChannelId(CHANNEL_ONE_ID);
         }
 
@@ -450,7 +446,7 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
     }
 
     private String formatTime(long millisUntilFinished) {
-        return getResources().getString(R.string.notification_time_left)  + " " +
+        return getResources().getString(R.string.notification_time_left) + " " +
                 TimeFormatUtil.formatTime(millisUntilFinished);
     }
 

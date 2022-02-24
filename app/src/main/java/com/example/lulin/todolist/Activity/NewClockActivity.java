@@ -3,7 +3,6 @@ package com.example.lulin.todolist.Activity;
 import android.Manifest;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +10,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -23,11 +21,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baidu.speech.EventListener;
 import com.baidu.speech.EventManager;
@@ -36,15 +32,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.lulin.todolist.Bean.BaiDuVoice;
-import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
-import com.example.lulin.todolist.R;
-import com.example.lulin.todolist.Bean.Clock;
-import com.example.lulin.todolist.Utils.NetWorkUtils;
-import com.example.lulin.todolist.Utils.SPUtils;
-import com.example.lulin.todolist.Utils.SeekBarPreference;
 import com.example.lulin.todolist.Bean.Tomato;
 import com.example.lulin.todolist.Bean.User;
-import com.example.lulin.todolist.Utils.ToastUtils;
+import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
+import com.example.lulin.todolist.R;
+import com.example.lulin.todolist.Utils.SPUtils;
+import com.example.lulin.todolist.Utils.SeekBarPreference;
 import com.example.lulin.todolist.Widget.ClockApplication;
 import com.google.gson.Gson;
 import com.lai.library.ButtonStyle;
@@ -53,17 +46,11 @@ import com.pl.voiceAnimation.VoiceAnimator;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
-import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
-
 
 /**
  * 新建待办事项类
@@ -86,7 +73,7 @@ public class NewClockActivity extends BasicActivity implements EventListener {
             R.drawable.c_img6,
             R.drawable.c_img7,};
     private int imgId;
-    private int workLength, shortBreak,longBreak,frequency;
+    private int workLength, shortBreak, longBreak, frequency;
     SQLiteDatabase db;
     private Tomato tomato;
     private long id;
@@ -97,15 +84,15 @@ public class NewClockActivity extends BasicActivity implements EventListener {
     private EventManager manager;
     private ButtonStyle done;
 
-    private int[] data={
-            0,0,0,0,1,0,0,0,18,19,
-            21,18,9,9,16,20,18,11,17,13,
-            17,12,16,16,20,16,5,1,0,4,
-            16,17,9,16,20,11,6,16,16,11,
-            6,14,16,8,5,13,13,6,2,16,
-            18,12,7,13,15,13,4,1,18,15,
-            7,3,14,13,6,4,12,10,15,12,
-            1,1,15,20,0,3,10,1,8,17};
+    private int[] data = {
+            0, 0, 0, 0, 1, 0, 0, 0, 18, 19,
+            21, 18, 9, 9, 16, 20, 18, 11, 17, 13,
+            17, 12, 16, 16, 20, 16, 5, 1, 0, 4,
+            16, 17, 9, 16, 20, 11, 6, 16, 16, 11,
+            6, 14, 16, 8, 5, 13, 13, 6, 2, 16,
+            18, 12, 7, 13, 15, 13, 4, 1, 18, 15,
+            7, 3, 14, 13, 6, 4, 12, 10, 15, 12,
+            1, 1, 15, 20, 0, 3, 10, 1, 8, 17};
     private VoiceAnimator voiceAnimator;
 
     @Override
@@ -134,7 +121,7 @@ public class NewClockActivity extends BasicActivity implements EventListener {
 
     }
 
-    private void initHeadImage(){
+    private void initHeadImage() {
 
         Random random = new Random();
         imgId = imageArray[random.nextInt(7)];
@@ -154,43 +141,43 @@ public class NewClockActivity extends BasicActivity implements EventListener {
         Resources res = getResources();
         // 工作时长
         (new SeekBarPreference(this))
-                .setSeekBar((SeekBar)findViewById(R.id.pref_key_work_length))
-                .setSeekBarValue((TextView)findViewById(R.id.pref_key_work_length_value))
+                .setSeekBar((SeekBar) findViewById(R.id.pref_key_work_length))
+                .setSeekBarValue((TextView) findViewById(R.id.pref_key_work_length_value))
                 .setMax(res.getInteger(R.integer.pref_work_length_max))
                 .setMin(res.getInteger(R.integer.pref_work_length_min))
                 .setUnit(R.string.pref_title_time_value)
-                .setProgress((int)SPUtils
-                        .get(NewClockActivity.this,"pref_key_work_length", ClockApplication.DEFAULT_WORK_LENGTH))
+                .setProgress((int) SPUtils
+                        .get(NewClockActivity.this, "pref_key_work_length", ClockApplication.DEFAULT_WORK_LENGTH))
                 .build();
         // 短时休息
         (new SeekBarPreference(this))
-                .setSeekBar((SeekBar)findViewById(R.id.pref_key_short_break))
-                .setSeekBarValue((TextView)findViewById(R.id.pref_key_short_break_value))
+                .setSeekBar((SeekBar) findViewById(R.id.pref_key_short_break))
+                .setSeekBarValue((TextView) findViewById(R.id.pref_key_short_break_value))
                 .setMax(res.getInteger(R.integer.pref_short_break_max))
                 .setMin(res.getInteger(R.integer.pref_short_break_min))
                 .setUnit(R.string.pref_title_time_value)
-                .setProgress((int)SPUtils
-                        .get(NewClockActivity.this,"pref_key_short_break", ClockApplication.DEFAULT_SHORT_BREAK))
+                .setProgress((int) SPUtils
+                        .get(NewClockActivity.this, "pref_key_short_break", ClockApplication.DEFAULT_SHORT_BREAK))
                 .build();
         // 长时休息
         (new SeekBarPreference(this))
-                .setSeekBar((SeekBar)findViewById(R.id.pref_key_long_break))
-                .setSeekBarValue((TextView)findViewById(R.id.pref_key_long_break_value))
+                .setSeekBar((SeekBar) findViewById(R.id.pref_key_long_break))
+                .setSeekBarValue((TextView) findViewById(R.id.pref_key_long_break_value))
                 .setMax(res.getInteger(R.integer.pref_long_break_max))
                 .setMin(res.getInteger(R.integer.pref_long_break_min))
                 .setUnit(R.string.pref_title_time_value)
-                .setProgress((int)SPUtils
-                        .get(NewClockActivity.this,"pref_key_long_break", ClockApplication.DEFAULT_LONG_BREAK))
+                .setProgress((int) SPUtils
+                        .get(NewClockActivity.this, "pref_key_long_break", ClockApplication.DEFAULT_LONG_BREAK))
                 .build();
         // 长时休息间隔
         (new SeekBarPreference(this))
-                .setSeekBar((SeekBar)findViewById(R.id.pref_key_long_break_frequency))
-                .setSeekBarValue((TextView)findViewById(R.id.pref_key_long_break_frequency_value))
+                .setSeekBar((SeekBar) findViewById(R.id.pref_key_long_break_frequency))
+                .setSeekBarValue((TextView) findViewById(R.id.pref_key_long_break_frequency_value))
                 .setMax(res.getInteger(R.integer.pref_long_break_frequency_max))
                 .setMin(res.getInteger(R.integer.pref_long_break_frequency_min))
                 .setUnit(R.string.pref_title_frequency_value)
-                .setProgress((int)SPUtils
-                        .get(NewClockActivity.this,"pref_key_long_break_frequency", ClockApplication.DEFAULT_LONG_BREAK_FREQUENCY))
+                .setProgress((int) SPUtils
+                        .get(NewClockActivity.this, "pref_key_long_break_frequency", ClockApplication.DEFAULT_LONG_BREAK_FREQUENCY))
                 .build();
 
         fab_ok.setOnClickListener(new View.OnClickListener() {
@@ -198,55 +185,55 @@ public class NewClockActivity extends BasicActivity implements EventListener {
             public void onClick(View view) {
 
                 clockTitle = nv_clock_title.getText().toString();
-                workLength = (int)SPUtils
-                        .get(NewClockActivity.this,"pref_key_work_length", ClockApplication.DEFAULT_WORK_LENGTH);
-                shortBreak = (int)SPUtils
-                        .get(NewClockActivity.this,"pref_key_short_break", ClockApplication.DEFAULT_SHORT_BREAK);
-                longBreak = (int)SPUtils
-                        .get(NewClockActivity.this,"pref_key_long_break", ClockApplication.DEFAULT_LONG_BREAK);
-                frequency = (int)SPUtils
-                        .get(NewClockActivity.this,"pref_key_long_break_frequency", ClockApplication.DEFAULT_LONG_BREAK_FREQUENCY);
-                User user = User.getCurrentUser(User.class);
+                workLength = (int) SPUtils
+                        .get(NewClockActivity.this, "pref_key_work_length", ClockApplication.DEFAULT_WORK_LENGTH);
+                shortBreak = (int) SPUtils
+                        .get(NewClockActivity.this, "pref_key_short_break", ClockApplication.DEFAULT_SHORT_BREAK);
+                longBreak = (int) SPUtils
+                        .get(NewClockActivity.this, "pref_key_long_break", ClockApplication.DEFAULT_LONG_BREAK);
+                frequency = (int) SPUtils
+                        .get(NewClockActivity.this, "pref_key_long_break_frequency", ClockApplication.DEFAULT_LONG_BREAK_FREQUENCY);
+                // User user = User.getCurrentUser(User.class);
                 tomato = new Tomato();
-                tomato.setUser(user);
+                // tomato.setUser(user);
                 tomato.setTitle(clockTitle);
                 tomato.setWorkLength(workLength);
                 tomato.setShortBreak(shortBreak);
                 tomato.setLongBreak(longBreak);
                 tomato.setFrequency(frequency);
                 tomato.setImgId(imgId);
-                boolean isSync = (Boolean) SPUtils.get(getApplication(),"sync",true);
-                if(isSync){
-                    if(NetWorkUtils.isNetworkConnected(getApplication()) && User.getCurrentUser(User.class)!= null){
-                        tomato.save(new SaveListener<String>() {
-                            @Override
-                            public void done(String s, BmobException e) {
-                                if (e==null){
-                                    ContentValues values = new ContentValues();
-                                    values.put("clocktitle", clockTitle);
-                                    values.put("workLength", workLength);
-                                    values.put("shortBreak", shortBreak);
-                                    values.put("longBreak", longBreak);
-                                    values.put("frequency", frequency);
-                                    values.put("objectId", tomato.getObjectId());
-                                    values.put("imgId", imgId);
-                                    id = db.insert("Clock",null,values);
-                                    Intent intent = new Intent(NewClockActivity.this, ClockActivity.class);
-                                    intent.putExtra("id",id);
-                                    intent.putExtra("clocktitle",clockTitle);
-                                    intent.putExtra("workLength", workLength);
-                                    intent.putExtra("shortBreak", shortBreak);
-                                    intent.putExtra("longBreak", longBreak);
-                                    startActivity(intent);
-                                    finish();
-                                } else {
-                                    Log.i(TAG, "保存到bmob云失败: " + e.getMessage());
-                                }
-                            }
-                        });
-                    } else {
-                        Toasty.info(NewClockActivity.this, "请先登录", Toast.LENGTH_SHORT, true).show();
-                    }
+                boolean isSync = (Boolean) SPUtils.get(getApplication(), "sync", true);
+                if (isSync) {
+                    // if(NetWorkUtils.isNetworkConnected(getApplication()) && User.getCurrentUser(User.class)!= null){
+                    //     tomato.save(new SaveListener<String>() {
+                    //         @Override
+                    //         public void done(String s, BmobException e) {
+                    //             if (e==null){
+                    //                 ContentValues values = new ContentValues();
+                    //                 values.put("clocktitle", clockTitle);
+                    //                 values.put("workLength", workLength);
+                    //                 values.put("shortBreak", shortBreak);
+                    //                 values.put("longBreak", longBreak);
+                    //                 values.put("frequency", frequency);
+                    //                 values.put("objectId", tomato.getObjectId());
+                    //                 values.put("imgId", imgId);
+                    //                 id = db.insert("Clock",null,values);
+                    //                 Intent intent = new Intent(NewClockActivity.this, ClockActivity.class);
+                    //                 intent.putExtra("id",id);
+                    //                 intent.putExtra("clocktitle",clockTitle);
+                    //                 intent.putExtra("workLength", workLength);
+                    //                 intent.putExtra("shortBreak", shortBreak);
+                    //                 intent.putExtra("longBreak", longBreak);
+                    //                 startActivity(intent);
+                    //                 finish();
+                    //             } else {
+                    //                 Log.i(TAG, "保存到bmob云失败: " + e.getMessage());
+                    //             }
+                    //         }
+                    //     });
+                    // } else {
+                    //     Toasty.info(NewClockActivity.this, "请先登录", Toast.LENGTH_SHORT, true).show();
+                    // }
 
                 } else {
                     ContentValues values = new ContentValues();
@@ -255,19 +242,18 @@ public class NewClockActivity extends BasicActivity implements EventListener {
                     values.put("shortBreak", shortBreak);
                     values.put("longBreak", longBreak);
                     values.put("frequency", frequency);
-                    values.put("objectId", tomato.getObjectId());
+                    // values.put("objectId", tomato.getObjectId());
                     values.put("imgId", imgId);
-                    id = db.insert("Clock",null,values);
+                    id = db.insert("Clock", null, values);
                     Intent intent = new Intent(NewClockActivity.this, ClockActivity.class);
-                    intent.putExtra("id",id);
-                    intent.putExtra("clocktitle",clockTitle);
+                    intent.putExtra("id", id);
+                    intent.putExtra("clocktitle", clockTitle);
                     intent.putExtra("workLength", workLength);
                     intent.putExtra("shortBreak", shortBreak);
                     intent.putExtra("longBreak", longBreak);
                     startActivity(intent);
                     finish();
                 }
-
 
             }
         });
@@ -296,17 +282,14 @@ public class NewClockActivity extends BasicActivity implements EventListener {
         manager.registerListener(this);
     }
 
-
-
     /*启动*/
     private void start() {
-
 
         Map<String, Object> params1 = new LinkedHashMap<>();
         String event = null;
         //开启录音
         event = com.baidu.speech.asr.SpeechConstant.ASR_START;
-//        params1.put(com.baidu.speech.asr.SpeechConstant.APP_NAME, "");
+        //        params1.put(com.baidu.speech.asr.SpeechConstant.APP_NAME, "");
         //音量数据回调开启
         params1.put(com.baidu.speech.asr.SpeechConstant.ACCEPT_AUDIO_VOLUME, false);
         //活动语音检测
@@ -315,12 +298,12 @@ public class NewClockActivity extends BasicActivity implements EventListener {
         params1.put(com.baidu.speech.asr.SpeechConstant.VAD_ENDPOINT_TIMEOUT, 0);
         if (enableOffline) {
             //离线在线并行策略
-//            params1.put(com.baidu.speech.asr.SpeechConstant.DECODER, 2);
+            //            params1.put(com.baidu.speech.asr.SpeechConstant.DECODER, 2);
         }
         //开启语音音频数据回调
         params1.put(com.baidu.speech.asr.SpeechConstant.ACCEPT_AUDIO_DATA, true);
         //设置文件回调
-//        params1.put(com.baidu.speech.asr.SpeechConstant.IN_FILE, Environment.getExternalStorageDirectory() + "/msc/baidu.wav");
+        //        params1.put(com.baidu.speech.asr.SpeechConstant.IN_FILE, Environment.getExternalStorageDirectory() + "/msc/baidu.wav");
         //保存文件
         params1.put(com.baidu.speech.asr.SpeechConstant.OUT_FILE, Environment.getExternalStorageDirectory() + "/msc/baidu.wav");
 
@@ -363,7 +346,7 @@ public class NewClockActivity extends BasicActivity implements EventListener {
         }
     }
 
-    private void showVoiceDialog(){
+    private void showVoiceDialog() {
         voice = new MaterialDialog(NewClockActivity.this);
         LayoutInflater layoutInflater = LayoutInflater.from(NewClockActivity.this);
         View view = layoutInflater.inflate(R.layout.dialog_voice, null);
@@ -381,7 +364,7 @@ public class NewClockActivity extends BasicActivity implements EventListener {
             @Override
             public void run() {
 
-                while(true){
+                while (true) {
                     for (int aData : data) {
                         voiceAnimator.setValue((aData) / 20f);
                         try {
@@ -426,9 +409,9 @@ public class NewClockActivity extends BasicActivity implements EventListener {
         finish();
     }
 
-    private void setStatusBar(){
+    private void setStatusBar() {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);

@@ -1,8 +1,6 @@
 package com.example.lulin.todolist.Bean;
 
-import cn.bmob.v3.BmobObject;
-
-public class Tomato extends BmobObject {
+public class Tomato {
     private String title;
     private User user;
     private Clock clock;
@@ -12,53 +10,67 @@ public class Tomato extends BmobObject {
     private int longBreak;
     private int frequency;
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
     }
-    public void setClock(Clock clock){
+
+    public void setClock(Clock clock) {
         this.clock = clock;
     }
-    public void setUser(User user){
+
+    public void setUser(User user) {
         this.user = user;
     }
-    public void setImgId(int imgId){
+
+    public void setImgId(int imgId) {
         this.imgId = imgId;
     }
-    public void setWorkLength(int workLength){
+
+    public void setWorkLength(int workLength) {
         this.workLength = workLength;
     }
-    public void setShortBreak(int shortBreak){
+
+    public void setShortBreak(int shortBreak) {
         this.shortBreak = shortBreak;
     }
-    public void setLongBreak(int longBreak){
+
+    public void setLongBreak(int longBreak) {
         this.longBreak = longBreak;
     }
-    public void setFrequency(int frequency){
+
+    public void setFrequency(int frequency) {
         this.frequency = frequency;
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return title;
     }
-    public Clock  getClock(){
+
+    public Clock getClock() {
         return clock;
     }
-    public User getUser(){
+
+    public User getUser() {
         return user;
     }
-    public int getImgId(){
+
+    public int getImgId() {
         return imgId;
     }
-    public int getWorkLength(){
+
+    public int getWorkLength() {
         return workLength;
     }
-    public int getShortBreak(){
+
+    public int getShortBreak() {
         return shortBreak;
     }
-    public int getLongBreak(){
+
+    public int getLongBreak() {
         return longBreak;
     }
-    public int getFrequency(){
+
+    public int getFrequency() {
         return frequency;
     }
 }

@@ -16,7 +16,7 @@
         android:padding="16dp"
         android:text="拍照"
         android:textColor="#666666"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:padding="16dp"
         android:text="相册"
         android:textColor="#666666"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
     <View
         android:layout_width="match_parent"
@@ -52,6 +52,6 @@
         android:padding="16dp"
         android:text="取消"
         android:textColor="#666666"
-        android:textSize="14sp"/>
+        android:textSize="14sp" />
 
 </LinearLayout>

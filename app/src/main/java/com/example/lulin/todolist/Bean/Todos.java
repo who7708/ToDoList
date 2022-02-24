@@ -1,37 +1,36 @@
 package com.example.lulin.todolist.Bean;
 
+import java.util.Date;
 
-import cn.bmob.v3.BmobObject;
-import cn.bmob.v3.datatype.BmobDate;
-
-public class Todos extends BmobObject{
+public class Todos {
     private String title;
     private String desc;
     private String date;
     private String time;
-    private long remindTime,remindTimeNoDay;
-    private int id,isAlerted,isRepeat,imgId;
-    private BmobDate bmobDate;
+    private long remindTime, remindTimeNoDay;
+    private int id, isAlerted, isRepeat, imgId;
+    private Date bmobDate;
     private User user;
     private String dbObjectId;
 
-    public Todos(){}
+    public Todos() {
+    }
 
-//    public Todos(int id,String title, String desc, String date, String time,long remindTime,long remindTimeNoDay,int isAlerted,int isRepeat,int imgId) {
-//
-//        this.id = id;
-//        this.title = title;
-//        this.desc = desc;
-//        this.date = date;
-//        this.time = time;
-//        this.isAlerted = isAlerted;
-//        this.remindTime = remindTime;
-//        this.remindTimeNoDay = remindTimeNoDay;
-//        this.isRepeat = isRepeat;
-//        this.imgId = imgId;
-//    }
+    //    public Todos(int id,String title, String desc, String date, String time,long remindTime,long remindTimeNoDay,int isAlerted,int isRepeat,int imgId) {
+    //
+    //        this.id = id;
+    //        this.title = title;
+    //        this.desc = desc;
+    //        this.date = date;
+    //        this.time = time;
+    //        this.isAlerted = isAlerted;
+    //        this.remindTime = remindTime;
+    //        this.remindTimeNoDay = remindTimeNoDay;
+    //        this.isRepeat = isRepeat;
+    //        this.imgId = imgId;
+    //    }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -39,55 +38,51 @@ public class Todos extends BmobObject{
         this.desc = desc;
     }
 
-
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setDate(String date){
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public void setTime(String time){
+    public void setTime(String time) {
         this.time = time;
     }
 
-    public void setisAlerted(int hasAlerted){
+    public void setisAlerted(int hasAlerted) {
         this.isAlerted = hasAlerted;
     }
 
-    public void setRemindTime(long remindTime){
+    public void setRemindTime(long remindTime) {
         this.remindTime = remindTime;
     }
 
-    public void setRemindTimeNoDay(long remindTimeNoDay){
+    public void setRemindTimeNoDay(long remindTimeNoDay) {
         this.remindTimeNoDay = remindTimeNoDay;
     }
 
-    public void setIsRepeat(int isRepeat){
+    public void setIsRepeat(int isRepeat) {
         this.isRepeat = isRepeat;
     }
 
-    public void setImgId(int imgId){
+    public void setImgId(int imgId) {
         this.imgId = imgId;
     }
 
-    public void setBmobDate(BmobDate bmobDate){
+    public void setBmobDate(Date bmobDate) {
         this.bmobDate = bmobDate;
     }
 
-    public void setUser(User user){
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public void setDbObjectId(String dbObjectId){
+    public void setDbObjectId(String dbObjectId) {
         this.dbObjectId = dbObjectId;
     }
 
-
-
-    public int getId(){
+    public int getId() {
         return id;
     }
 
@@ -95,40 +90,39 @@ public class Todos extends BmobObject{
         return desc;
     }
 
-
     public String getTitle() {
         return title;
     }
 
-    public String getDate(){
+    public String getDate() {
         return date;
     }
 
-    public String getTime(){
+    public String getTime() {
         return time;
     }
 
-    public int getisAlerted(){
+    public int getisAlerted() {
         return isAlerted;
     }
 
-    public long getRemindTime(){
+    public long getRemindTime() {
         return remindTime;
     }
 
-    public long getRemindTimeNoDay(){
+    public long getRemindTimeNoDay() {
         return remindTimeNoDay;
     }
 
-    public int getIsRepeat(){
+    public int getIsRepeat() {
         return isRepeat;
     }
 
-    public int getImgId(){
+    public int getImgId() {
         return imgId;
     }
 
-    public BmobDate getBmobDate() {
+    public Date getBmobDate() {
         return bmobDate;
     }
 
@@ -136,7 +130,7 @@ public class Todos extends BmobObject{
         return user;
     }
 
-    public String getDbObjectId(){
+    public String getDbObjectId() {
         return dbObjectId;
     }
 }

@@ -36,9 +36,9 @@ import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Utils.NetWorkUtils;
 import com.example.lulin.todolist.Utils.SPUtils;
 
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.SaveListener;
+// import cn.bmob.v3.BmobUser;
+// import cn.bmob.v3.exception.BmobException;
+// import cn.bmob.v3.listener.SaveListener;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -77,16 +77,16 @@ public class LoginActivity extends BasicActivity implements OnClickListener {
     }
 
     private void initView() {
-        mBtnLogin = (Button) findViewById(R.id.btn_login);
+        mBtnLogin = findViewById(R.id.btn_login);
         progress = findViewById(R.id.login_layout_progress);
         mInputLayout = findViewById(R.id.login_input_layout);
-        mName = (LinearLayout) findViewById(R.id.input_layout_name);
-        mPsw = (LinearLayout) findViewById(R.id.input_layout_psw);
-        mEtUserName = (EditText) findViewById(R.id.input_login_name);
-        mEtPassWord = (EditText)  findViewById(R.id.input_login_pwd);
-        mRememberCheck = (CheckBox) findViewById(R.id.login_remember);
-        sign_in = (TextView) findViewById(R.id.sign_in);
-        skip_login = (TextView) findViewById(R.id.skip_login);
+        mName = findViewById(R.id.input_layout_name);
+        mPsw = findViewById(R.id.input_layout_psw);
+        mEtUserName = findViewById(R.id.input_login_name);
+        mEtPassWord = findViewById(R.id.input_login_pwd);
+        mRememberCheck = findViewById(R.id.login_remember);
+        sign_in = findViewById(R.id.sign_in);
+        skip_login = findViewById(R.id.skip_login);
         skip_login.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG );
 
         sign_in.setOnClickListener(this);
@@ -242,36 +242,36 @@ public class LoginActivity extends BasicActivity implements OnClickListener {
                                 return;
                             }
 
-                            final BmobUser user = new BmobUser();
-                            user.setUsername(username);
-                            user.setPassword(password);
-                            user.login(new SaveListener<BmobUser>() {
-                                @Override
-                                public void done(BmobUser bmobUser, BmobException e) {
-                                    if (e == null) {
-                                        SPUtils.put(getApplication(),"sync",true);
-//                                        Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
-                                        Toasty.success(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT, true).show();
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        //记住密码
-                                        editor=login_sp.edit();
-                                        if(mRememberCheck.isChecked()){
-                                            editor.putBoolean("remember_password",true);
-                                            editor.putString("account",username);
-                                            editor.putString("password",password);
-                                        }else {
-                                            editor.clear();
-                                        }
-                                        editor.apply();
-                                        finish();
-                                    } else {
-                                        recovery();
-//                                        Toast.makeText(LoginActivity.this, "账号或密码不正确", Toast.LENGTH_SHORT).show();
-                                        Toasty.error(LoginActivity.this, "账号或密码不正确", Toast.LENGTH_SHORT, true).show();
-                                    }
-                                }
-                            });
+                            // final BmobUser user = new BmobUser();
+                            // user.setUsername(username);
+                            // user.setPassword(password);
+//                             user.login(new SaveListener<BmobUser>() {
+//                                 @Override
+//                                 public void done(BmobUser bmobUser, BmobException e) {
+//                                     if (e == null) {
+//                                         SPUtils.put(getApplication(),"sync",true);
+// //                                        Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
+//                                         Toasty.success(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT, true).show();
+//                                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                                         startActivity(intent);
+//                                         //记住密码
+//                                         editor=login_sp.edit();
+//                                         if(mRememberCheck.isChecked()){
+//                                             editor.putBoolean("remember_password",true);
+//                                             editor.putString("account",username);
+//                                             editor.putString("password",password);
+//                                         }else {
+//                                             editor.clear();
+//                                         }
+//                                         editor.apply();
+//                                         finish();
+//                                     } else {
+//                                         recovery();
+// //                                        Toast.makeText(LoginActivity.this, "账号或密码不正确", Toast.LENGTH_SHORT).show();
+//                                         Toasty.error(LoginActivity.this, "账号或密码不正确", Toast.LENGTH_SHORT, true).show();
+//                                     }
+//                                 }
+//                             });
                         } else {
                             recovery();
 //                            Toast.makeText(LoginActivity.this, "无网络连接！", Toast.LENGTH_SHORT).show();

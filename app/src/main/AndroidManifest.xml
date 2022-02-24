@@ -29,13 +29,15 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
 
     <!-- 任务栈权限 -->
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -49,10 +51,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <provider
-            android:name="cn.bmob.v3.util.BmobContentProvider"
-            android:authorities="com.example.lulin.todolist.BmobContentProvider">
-        </provider>
+        <!--<provider-->
+        <!--    android:name="cn.bmob.v3.util.BmobContentProvider"-->
+        <!--    android:authorities="com.example.lulin.todolist.BmobContentProvider">-->
+        <!--</provider>-->
 
         <!-- 百度语音注册-->
         <meta-data
@@ -65,8 +67,9 @@
             android:name="com.baidu.speech.SECRET_KEY"
             android:value="eZ3B4eYD8xBhZ09ZOGfyzqQKPqnuetG2" />
         <!-- 百度语音服务注册-->
-        <service android:name="com.baidu.speech.VoiceRecognitionService"
-            android:exported="false"/>
+        <service
+            android:name="com.baidu.speech.VoiceRecognitionService"
+            android:exported="false" />
 
         <activity
             android:name=".Activity.SplashActivity"
@@ -89,12 +92,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.EditTodoActivity" />
 
-        <service android:name=".Service.AlarmService"
-                android:process=":live">
+        <service
+            android:name=".Service.AlarmService"
+            android:process=":live">
             <intent-filter>
-                <action
-                    android:name="com.example.lulin.todolist.Service.AlarmService"
-                    />
+                <action android:name="com.example.lulin.todolist.Service.AlarmService" />
             </intent-filter>
         </service>
 
@@ -103,7 +105,6 @@
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
-
 
         <activity
             android:name=".Activity.RegisterActivity"
@@ -119,8 +120,7 @@
         <service
             android:name=".Service.ClockService"
             android:enabled="true"
-            android:exported="false">
-        </service>
+            android:exported="false"></service>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -147,25 +147,25 @@
             android:theme="@style/AppTheme.About" />
         <activity
             android:name=".Activity.ClockActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:excludeFromRecents="true"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-        android:name=".Activity.ScheduleActivity"
-        android:theme="@style/AppTheme.NoActionBar"/>
+            android:name=".Activity.ScheduleActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".Activity.NewClockActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Bmob云自动更新-->
-        <activity
-            android:name="cn.bmob.v3.update.UpdateDialogActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
+        <!--<activity-->
+        <!--    android:name="cn.bmob.v3.update.UpdateDialogActivity"-->
+        <!--    android:theme="@android:style/Theme.Translucent.NoTitleBar" >-->
+        <!--</activity>-->
 
         <!-- 监听系统广播自启动app-->
-        <receiver android:name=".Receiver.BootUpReceiver" >
+        <receiver android:name=".Receiver.BootUpReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />

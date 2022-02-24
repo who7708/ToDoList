@@ -1,5 +1,7 @@
 package com.example.lulin.todolist.Activity;
 
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
@@ -38,39 +40,26 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
-import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Adapter.FragmentAdapter;
+import com.example.lulin.todolist.Bean.User;
 import com.example.lulin.todolist.Fragment.RankFragment;
 import com.example.lulin.todolist.Fragment.StatisticFragment;
+import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Utils.PhotoUtils;
 import com.example.lulin.todolist.Utils.SPUtils;
-import com.example.lulin.todolist.Utils.ToastUtils;
-import com.example.lulin.todolist.Bean.User;
 import com.example.lulin.todolist.Widget.CircleImageView;
 import com.kekstudio.dachshundtablayout.DachshundTabLayout;
 import com.kekstudio.dachshundtablayout.indicators.DachshundIndicator;
 import com.lidroid.xutils.view.annotation.ViewInject;
 import com.lidroid.xutils.view.annotation.event.OnClick;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DownloadFileListener;
-import cn.bmob.v3.listener.FetchUserInfoListener;
-import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
 import es.dmoral.toasty.Toasty;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import me.drakeet.materialdialog.MaterialDialog;
-
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 /**
  * @author LeeLulin on 2018/8/6 16:16
@@ -115,12 +104,12 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
         initView();
         initViewPager();
         saveInformation();
-        setUserDataFromBmob();
+        // setUserDataFromBmob();
         glideLoad();
         initGuide();
     }
 
-    private void initView(){
+    private void initView() {
         toolbar_username = (TextView) findViewById(R.id.toolbar_username);
         tv_nickname = (TextView) findViewById(R.id.nickname);
         tv_autograph = (TextView) findViewById(R.id.autograph);
@@ -170,7 +159,6 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
         }
     }
 
-
     /**
      * 自动获取相机权限
      */
@@ -207,8 +195,9 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (hasSdcard()) {
                         imageUri = Uri.fromFile(fileUri);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             imageUri = FileProvider.getUriForFile(UserDataActivity.this, "com.example.fileprovider", fileUri);//通过FileProvider创建一个content类型的Uri
+                        }
                         PhotoUtils.takePicture(this, imageUri, CODE_CAMERA_REQUEST);
                     } else {
                         Toasty.info(this, "设备没有SD卡", Toast.LENGTH_SHORT, true).show();
@@ -217,7 +206,6 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
                     Toasty.info(this, "请允许打开相机", Toast.LENGTH_SHORT, true).show();
                 }
                 break;
-
 
             }
             //调用系统相册申请Sdcard权限回调
@@ -265,54 +253,53 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
                     if (bitmap != null) {
                         user.setLocalImg(bitmap);
                         glideLoad();
-//                        showImages(bitmap);
-//                        Glide.with(getApplicationContext())
-//                                .load(bitmap)
-//                                .apply(bitmapTransform(new BlurTransformation(25, 3)))
-//                                .into(top_bg);
+                        //                        showImages(bitmap);
+                        //                        Glide.with(getApplicationContext())
+                        //                                .load(bitmap)
+                        //                                .apply(bitmapTransform(new BlurTransformation(25, 3)))
+                        //                                .into(top_bg);
 
                         String picPath = cropImageUri.getPath();
-                        Log.i("login",picPath);
-                        final BmobFile bmobFile = new BmobFile(new File(picPath));
+                        Log.i("login", picPath);
+                        // final BmobFile bmobFile = new BmobFile(new File(picPath));
 
-                        bmobFile.uploadblock(new UploadFileListener() {
-
-                            @Override
-                            public void done(BmobException e) {
-                                if (e==null){
-                                    user = User.getCurrentUser(User.class);
-                                    user.setImg(bmobFile);
-                                    user.update(new UpdateListener() {
-                                        @Override
-                                        public void done(BmobException e) {
-                                            if (e==null){
-                                                Log.i("login", "上传成功！" + bmobFile.getUrl());
-                                                setUserDataFromBmob();
-                                            } else {
-                                                Log.i("login", "上传失败！" + e.getMessage());
-                                            }
-                                        }
-                                    });
-                                }else {
-                                    Log.i("login", "失败！ " + e.getMessage());
-                                }
-
-
-
-                            }
-
-                            @Override
-                            public void onProgress(Integer value) {
-                                // 返回的上传进度（百分比）
-                            }
-                        });
+                        // bmobFile.uploadblock(new UploadFileListener() {
+                        //
+                        //     @Override
+                        //     public void done(BmobException e) {
+                        //         if (e==null){
+                        //             user = User.getCurrentUser(User.class);
+                        //             user.setImg(bmobFile);
+                        //             user.update(new UpdateListener() {
+                        //                 @Override
+                        //                 public void done(BmobException e) {
+                        //                     if (e==null){
+                        //                         Log.i("login", "上传成功！" + bmobFile.getUrl());
+                        //                         setUserDataFromBmob();
+                        //                     } else {
+                        //                         Log.i("login", "上传失败！" + e.getMessage());
+                        //                     }
+                        //                 }
+                        //             });
+                        //         }else {
+                        //             Log.i("login", "失败！ " + e.getMessage());
+                        //         }
+                        //
+                        //
+                        //
+                        //     }
+                        //
+                        //     @Override
+                        //     public void onProgress(Integer value) {
+                        //         // 返回的上传进度（百分比）
+                        //     }
+                        // });
                     }
                     break;
                 default:
             }
         }
     }
-
 
     /**
      * 自动获取sdk权限
@@ -356,7 +343,7 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
     /**
      * 保存用户信息
      */
-    private void saveInformation(){
+    private void saveInformation() {
         user_head.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -368,16 +355,16 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 showEditDialog();
-            }});
+            }
+        });
     }
-
 
     /**
      * 设置状态栏透明
      */
-    private void setStatusBar(){
+    private void setStatusBar() {
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
@@ -396,7 +383,7 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
     private void showPopDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
         mCameradialog = new Dialog(this, R.style.BottomDialog);
-        LinearLayout root = (LinearLayout) inflater.from(this).inflate(R.layout.pop_menu,null);
+        LinearLayout root = (LinearLayout) inflater.from(this).inflate(R.layout.pop_menu, null);
         root.findViewById(R.id.takePic).setOnClickListener(this);
         root.findViewById(R.id.takeGallery).setOnClickListener(this);
         root.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
@@ -425,11 +412,14 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
      * 显示用户信息编辑框
      */
     protected void showEditDialog() {
-        User user = User.getCurrentUser(User.class);
+        User user = new User();
+        user.setNickName("nnnn");
+        user.setAutograph("aaa");
+        // User.getCurrentUser(User.class);
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View textEntryView = layoutInflater.inflate(R.layout.dialog_edit, null);
         et_nickname = (EditText) textEntryView.findViewById(R.id.edit_nickname);
-        et_autograph = (EditText)textEntryView.findViewById(R.id.edit_autograph);
+        et_autograph = (EditText) textEntryView.findViewById(R.id.edit_autograph);
         et_nickname.setText(user.getNickName());
         et_autograph.setText(user.getAutograph());
         final MaterialDialog editDialog = new MaterialDialog(UserDataActivity.this);
@@ -441,22 +431,21 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
 
                 String nickname = et_nickname.getText().toString();
                 String autograph = et_autograph.getText().toString();
-                User user = User.getCurrentUser(User.class);
-                user.setNickName(nickname);
-                user.setAutograph(autograph);
-                user.update(new UpdateListener() {
-                    @Override
-                    public void done(BmobException e) {
-                        if (e == null){
-                            Log.i(TAG, "更新成功");
-                            setUserDataFromBmob();
-                            editDialog.dismiss();
-                        }else {
-                            Log.i(TAG, "失败"+ e.getMessage());
-                        }
-                    }
-                });
-
+                // User user = User.getCurrentUser(User.class);
+                // user.setNickName(nickname);
+                // user.setAutograph(autograph);
+                // user.update(new UpdateListener() {
+                //     @Override
+                //     public void done(BmobException e) {
+                //         if (e == null){
+                //             Log.i(TAG, "更新成功");
+                //             setUserDataFromBmob();
+                //             editDialog.dismiss();
+                //         }else {
+                //             Log.i(TAG, "失败"+ e.getMessage());
+                //         }
+                //     }
+                // });
 
             }
         });
@@ -470,98 +459,97 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
 
     }
 
-
     /**
      * 从Bmob加载用户信息
      */
-    private void setUserDataFromBmob(){
-        user = User.getCurrentUser(User.class);
-        toolbar_username.setText(user.getNickName());
-        tv_nickname.setText(user.getNickName());
-        tv_autograph.setText(user.getAutograph());
-        BmobFile userImg = user.getImg();
-        SPUtils.put(UserDataActivity.this,"URL",userImg.getUrl());
-        userImg.download(new DownloadFileListener() {
-            @Override
-            public void done(String path, BmobException e) {
-                if(e==null){
-                    Log.i(TAG, "保存路径: " + path);
-                    imgPath = path;
-                    SPUtils.put(UserDataActivity.this, "path", imgPath);
-                    SPUtils.put(UserDataActivity.this, "head_signature", String.valueOf(System.currentTimeMillis()));
-                    glideLoad();
-
-                }else{
-                    Log.i(TAG, "下载失败" + e.getMessage());
-                }
-            }
-
-            @Override
-            public void onProgress(Integer integer, long l) {
-
-            }
-        });
-//        BmobQuery<User> bmobQuery = new BmobQuery();
-//        bmobQuery.getObject(user.getObjectId(), new QueryListener<User>() {
-//            @Override
-//            public void done(User user, BmobException e) {
-//                toolbar_username.setText(user.getNickName());
-//                tv_nickname.setText(user.getNickName());
-//                tv_autograph.setText(user.getAutograph());
-//                BmobFile userImg = user.getImg();
-//                SPUtils.put(UserDataActivity.this,"URL",userImg.getUrl());
-//                userImg.download(new DownloadFileListener() {
-//                    @Override
-//                    public void done(String path, BmobException e) {
-//                        if(e==null){
-//                            Log.i(TAG, "保存路径: " + path);
-//                            imgPath = path;
-//                            SPUtils.put(UserDataActivity.this, "path", imgPath);
-//                            SPUtils.put(UserDataActivity.this, "head_signature", String.valueOf(System.currentTimeMillis()));
-//                            glideLoad();
-//
-//                        }else{
-//                            Log.i(TAG, "下载失败" + e.getMessage());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onProgress(Integer integer, long l) {
-//
-//                    }
-//                });
-//
-//            }
-//        });
-    }
+    //     private void setUserDataFromBmob(){
+    //         user = User.getCurrentUser(User.class);
+    //         toolbar_username.setText(user.getNickName());
+    //         tv_nickname.setText(user.getNickName());
+    //         tv_autograph.setText(user.getAutograph());
+    //         BmobFile userImg = user.getImg();
+    //         SPUtils.put(UserDataActivity.this,"URL",userImg.getUrl());
+    //         userImg.download(new DownloadFileListener() {
+    //             @Override
+    //             public void done(String path, BmobException e) {
+    //                 if(e==null){
+    //                     Log.i(TAG, "保存路径: " + path);
+    //                     imgPath = path;
+    //                     SPUtils.put(UserDataActivity.this, "path", imgPath);
+    //                     SPUtils.put(UserDataActivity.this, "head_signature", String.valueOf(System.currentTimeMillis()));
+    //                     glideLoad();
+    //
+    //                 }else{
+    //                     Log.i(TAG, "下载失败" + e.getMessage());
+    //                 }
+    //             }
+    //
+    //             @Override
+    //             public void onProgress(Integer integer, long l) {
+    //
+    //             }
+    //         });
+    // //        BmobQuery<User> bmobQuery = new BmobQuery();
+    // //        bmobQuery.getObject(user.getObjectId(), new QueryListener<User>() {
+    // //            @Override
+    // //            public void done(User user, BmobException e) {
+    // //                toolbar_username.setText(user.getNickName());
+    // //                tv_nickname.setText(user.getNickName());
+    // //                tv_autograph.setText(user.getAutograph());
+    // //                BmobFile userImg = user.getImg();
+    // //                SPUtils.put(UserDataActivity.this,"URL",userImg.getUrl());
+    // //                userImg.download(new DownloadFileListener() {
+    // //                    @Override
+    // //                    public void done(String path, BmobException e) {
+    // //                        if(e==null){
+    // //                            Log.i(TAG, "保存路径: " + path);
+    // //                            imgPath = path;
+    // //                            SPUtils.put(UserDataActivity.this, "path", imgPath);
+    // //                            SPUtils.put(UserDataActivity.this, "head_signature", String.valueOf(System.currentTimeMillis()));
+    // //                            glideLoad();
+    // //
+    // //                        }else{
+    // //                            Log.i(TAG, "下载失败" + e.getMessage());
+    // //                        }
+    // //                    }
+    // //
+    // //                    @Override
+    // //                    public void onProgress(Integer integer, long l) {
+    // //
+    // //                    }
+    // //                });
+    // //
+    // //            }
+    // //        });
+    //     }
 
     /**
      * Glide图片加载
      */
-    private void glideLoad(){
+    private void glideLoad() {
 
         RequestOptions options_1 = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .signature(new ObjectKey(SPUtils.get(UserDataActivity.this,"head_signature","")))
+                .signature(new ObjectKey(SPUtils.get(UserDataActivity.this, "head_signature", "")))
                 .placeholder(R.drawable.default_photo);
 
         RequestOptions options_2 = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .signature(new ObjectKey(SPUtils.get(UserDataActivity.this,"head_signature","")))
+                .signature(new ObjectKey(SPUtils.get(UserDataActivity.this, "head_signature", "")))
                 .placeholder(R.drawable.ic_img1);
 
         Glide.with(getApplicationContext())
-                .load(SPUtils.get(UserDataActivity.this, "path" ,""))
+                .load(SPUtils.get(UserDataActivity.this, "path", ""))
                 .apply(options_1)
                 .into(toolbar_userhead);
 
         Glide.with(getApplicationContext())
-                .load(SPUtils.get(UserDataActivity.this, "path" ,""))
+                .load(SPUtils.get(UserDataActivity.this, "path", ""))
                 .apply(options_1)
                 .into(user_head);
 
         Glide.with(getApplicationContext())
-                .load(SPUtils.get(UserDataActivity.this, "path" ,""))
+                .load(SPUtils.get(UserDataActivity.this, "path", ""))
                 .apply(bitmapTransform(new BlurTransformation(25, 3)))
                 .apply(options_2)
                 .into(top_bg);
@@ -570,7 +558,7 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
     /**
      * 用户引导
      */
-    private void initGuide(){
+    private void initGuide() {
         NewbieGuide.with(this)
                 .setLabel("guide2")
                 .setShowCounts(1)//控制次数
@@ -581,7 +569,6 @@ public class UserDataActivity extends BasicActivity implements View.OnClickListe
                 .show();
 
     }
-
 
 }
 

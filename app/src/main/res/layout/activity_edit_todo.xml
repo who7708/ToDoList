@@ -23,7 +23,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="编辑"
                 android:textColor="@color/white"
-                android:textSize="18sp"/>
+                android:textSize="18sp" />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
@@ -38,7 +38,7 @@
         android:textColor="@color/black"
         android:textSize="22sp"
         android:padding="20sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edit_todo_title"

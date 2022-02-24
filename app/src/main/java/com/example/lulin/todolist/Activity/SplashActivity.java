@@ -2,19 +2,18 @@ package com.example.lulin.todolist.Activity;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.Handler;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.WindowManager;
 
+import com.example.lulin.todolist.Bean.User;
 import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Receiver.NetworkReceiver;
 import com.example.lulin.todolist.Service.AlarmService;
 import com.example.lulin.todolist.Utils.FileUtils;
 import com.example.lulin.todolist.Utils.NetWorkUtils;
 import com.example.lulin.todolist.Utils.SPUtils;
-import com.example.lulin.todolist.Bean.User;
 
-import cn.bmob.v3.Bmob;
 import site.gemus.openingstartanimation.NormalDrawStrategy;
 import site.gemus.openingstartanimation.OpeningStartAnimation;
 
@@ -34,21 +33,20 @@ public class SplashActivity extends BasicActivity {
         //复制assets下的资源文件到sd卡
         fileUtils = new FileUtils();
         fileUtils.copyData(getApplicationContext());
-        SPUtils.put(this,"isFocus",false);
+        SPUtils.put(this, "isFocus", false);
 
-        if (NetWorkUtils.isNetworkConnected(getApplication())){
-            Bmob.resetDomain("https://open3.bmob.cn/8/");
-            Bmob.initialize(getApplication(), APP_ID);
+        if (NetWorkUtils.isNetworkConnected(getApplication())) {
+            // Bmob.resetDomain("https://open3.bmob.cn/8/");
+            // Bmob.initialize(getApplication(), APP_ID);
         }
-
 
         Resources res = this.getResources();
         startService(new Intent(this, AlarmService.class));
         OpeningStartAnimation openingStartAnimation = new OpeningStartAnimation.Builder(this)
                 .setDrawStategy(new NormalDrawStrategy()) //设置动画效果
                 .setAppIcon(res.getDrawable(R.drawable.ic_launcher)) //设置图
-//                .setColorOfAppIcon() //设置绘制图标线条的颜色
-//                .setAppName("Do it") //设置app名称
+                //                .setColorOfAppIcon() //设置绘制图标线条的颜色
+                //                .setAppName("Do it") //设置app名称
                 .setColorOfAppName(R.color.icon_color) //设置app名称颜色
                 .setAppStatement("生命不息，奋斗不止") //设置一句话描述
                 .setColorOfAppStatement(R.color.icon_color) // 设置一句话描述的颜色
@@ -58,7 +56,9 @@ public class SplashActivity extends BasicActivity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                if (User.getCurrentUser(User.class)==null){
+                User user = null;
+                // User.getCurrentUser(User.class);
+                if (user == null) {
                     Intent mainIntent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(mainIntent);
                     finish();

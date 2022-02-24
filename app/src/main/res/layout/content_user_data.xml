@@ -1,6 +1,4 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_width="match_parent"
@@ -28,9 +26,7 @@
                 app:tabSelectedTextColor="@color/colorPrimary"
                 app:tabTextColor="@color/black_semi" />
 
-
         </LinearLayout>
-
 
     </com.example.lulin.todolist.Widget.DisInterceptNestedScrollView>
 
@@ -40,6 +36,5 @@
         android:layout_height="match_parent"
         android:paddingTop="1dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
 </LinearLayout>

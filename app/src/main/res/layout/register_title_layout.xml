@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dip"
     android:gravity="center_vertical"
-    android:padding="10dip" >
-
+    android:padding="10dip">
 
     <ImageView
         android:id="@+id/back_login"
@@ -15,5 +14,5 @@
         android:layout_marginLeft="10dp"
         android:clickable="true"
         android:src="@drawable/back"
-        android:tint="@color/white"/>
+        android:tint="@color/white" />
 </RelativeLayout>

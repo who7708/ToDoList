@@ -1,5 +1,7 @@
 package com.example.lulin.todolist.Dao;
 
+import static android.support.constraint.Constraints.TAG;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,25 +9,22 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
 import com.example.lulin.todolist.Bean.Todos;
+import com.example.lulin.todolist.DBHelper.MyDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.support.constraint.Constraints.TAG;
-
 /**
  * 数据库操作
  */
-
 
 public class ToDoDao {
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
     public ToDoDao(Context context) {
-        dbHelper = new MyDatabaseHelper(context.getApplicationContext(),"Data.db", null, 2);
+        dbHelper = new MyDatabaseHelper(context.getApplicationContext(), "Data.db", null, 2);
     }
 
     public void open() throws SQLException {
@@ -54,7 +53,7 @@ public class ToDoDao {
         values.put("isAlerted", todos.getisAlerted());
         values.put("isRepeat", todos.getIsRepeat());
         values.put("imgId", todos.getImgId());
-        values.put("objectId",todos.getObjectId());
+        // values.put("objectId",todos.getObjectId());
         long id = db.insert("Todo", null, values);
         close();
         return id;
@@ -62,13 +61,14 @@ public class ToDoDao {
 
     /**
      * 获取并返回所有未被提醒的事项
+     *
      * @return
      */
-    public List<Todos> getNotAlertTodos(){
+    public List<Todos> getNotAlertTodos() {
         open();
         List<Todos> allTodos = new ArrayList<Todos>();
         Cursor cursor = db.query("Todo",
-                null, "isAlerted = ?", new String[] { "0" }, null, null, "remindTime");
+                null, "isAlerted = ?", new String[]{"0"}, null, null, "remindTime");
         while (cursor.moveToNext()) {
             Todos data = new Todos();
             data.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -97,8 +97,8 @@ public class ToDoDao {
     public List<Todos> getAllTask() {
         open();
         List<Todos> todosList = new ArrayList<Todos>();
-        Cursor cursor=db.rawQuery("SELECT * FROM Todo", null);
-        while(cursor.moveToNext()) {
+        Cursor cursor = db.rawQuery("SELECT * FROM Todo", null);
+        while (cursor.moveToNext()) {
             Todos data = new Todos();
             data.setId(cursor.getInt(cursor.getColumnIndex("id")));
             data.setTitle(cursor.getString(cursor.getColumnIndex("todotitle")));
@@ -110,7 +110,7 @@ public class ToDoDao {
             data.setisAlerted(cursor.getInt(cursor.getColumnIndex("isAlerted")));
             data.setIsRepeat(cursor.getInt(cursor.getColumnIndex("isRepeat")));
             data.setImgId(cursor.getInt(cursor.getColumnIndex("imgId")));
-            data.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+            // data.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
             todosList.add(data);
         }
         // make sure to close the cursor
@@ -123,6 +123,7 @@ public class ToDoDao {
 
     /**
      * 获取单个待办事项
+     *
      * @param id
      * @return
      */
@@ -141,7 +142,7 @@ public class ToDoDao {
             data.setisAlerted(cursor.getInt(cursor.getColumnIndex("isAlerted")));
             data.setIsRepeat(cursor.getInt(cursor.getColumnIndex("isRepeat")));
             data.setImgId(cursor.getInt(cursor.getColumnIndex("imgId")));
-            data.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+            // data.setObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
         }
         cursor.close();
         close();
@@ -150,9 +151,10 @@ public class ToDoDao {
 
     /**
      * 设置待办事项为已提醒
+     *
      * @param id
      */
-    public void setisAlerted(int id){
+    public void setisAlerted(int id) {
         open();
         Log.i(TAG, "数据已更新");
         ContentValues values = new ContentValues();
@@ -183,6 +185,5 @@ public class ToDoDao {
         db.execSQL("update sqlite_sequence set seq = 0 where name = 'Todo' ");
         close();
     }
-
 
 }

@@ -25,10 +25,10 @@ import com.example.lulin.todolist.Bean.User;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
+// import cn.bmob.v3.BmobQuery;
+// import cn.bmob.v3.BmobUser;
+// import cn.bmob.v3.exception.BmobException;
+// import cn.bmob.v3.listener.FindListener;
 
 
 public class TodoFragment extends Fragment {
@@ -44,15 +44,15 @@ public class TodoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(NetWorkUtils.isNetworkConnected(getContext())) {
-            try{
-                if (User.getCurrentUser(User.class) != null){
-                    currentUser = BmobUser.getCurrentUser(User.class);
-                }
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
+        // if(NetWorkUtils.isNetworkConnected(getContext())) {
+        //     try{
+        //         if (User.getCurrentUser(User.class) != null){
+        //             currentUser = BmobUser.getCurrentUser(User.class);
+        //         }
+        //     } catch (Exception e){
+        //         e.printStackTrace();
+        //     }
+        // }
     }
 
     @Override

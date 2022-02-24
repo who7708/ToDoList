@@ -8,10 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.lulin.todolist.R;
 import com.example.lulin.todolist.Bean.User;
+import com.example.lulin.todolist.R;
 
 import java.util.List;
+
 /**
  * RecyclerView适配器
  */
@@ -21,20 +22,16 @@ public class RankRecyclerViewAdapter extends RecyclerView.Adapter<RankRecyclerVi
     private Context context;
     private User user;
 
-
     public RankRecyclerViewAdapter(List<User> rankList, Context context) {
         this.rankList = rankList;
         this.context = context;
     }
 
-
     //自定义ViewHolder类
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView user_name;
         TextView total;
-
-
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -43,27 +40,27 @@ public class RankRecyclerViewAdapter extends RecyclerView.Adapter<RankRecyclerVi
 
         }
 
-
     }
 
     @Override
     public RankRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v= LayoutInflater.from(context).inflate(R.layout.item_rank,viewGroup,false);
-        ViewHolder viewHolder=new ViewHolder(v);
+        View v = LayoutInflater.from(context).inflate(R.layout.item_rank, viewGroup, false);
+        ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RankRecyclerViewAdapter.ViewHolder ViewHolder, int i) {
 
-        user = User.getCurrentUser(User.class);
-        ViewHolder.user_name.setText(rankList.get(rankList.size()-1-i).getNickName());
-        ViewHolder.total.setText(rankList.get(rankList.size()-1-i).getTotal().toString() + "分钟");
-        if (rankList.get(rankList.size()-1-i).getNickName().equals(user.getNickName())){
+        user = new User();
+        user.setNickName("Haha");
+        // user = User.getCurrentUser(User.class);
+        ViewHolder.user_name.setText(rankList.get(rankList.size() - 1 - i).getNickName());
+        ViewHolder.total.setText(rankList.get(rankList.size() - 1 - i).getTotal().toString() + "分钟");
+        if (rankList.get(rankList.size() - 1 - i).getNickName().equals(user.getNickName())) {
             ViewHolder.user_name.setTextColor(Color.parseColor("#54aadb"));
             ViewHolder.total.setTextColor(Color.parseColor("#54aadb"));
         }
-
 
     }
 
@@ -71,6 +68,5 @@ public class RankRecyclerViewAdapter extends RecyclerView.Adapter<RankRecyclerVi
     public int getItemCount() {
         return rankList.size();
     }
-
 
 }

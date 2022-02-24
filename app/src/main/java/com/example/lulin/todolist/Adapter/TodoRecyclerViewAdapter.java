@@ -170,19 +170,19 @@ public class TodoRecyclerViewAdapter extends RecyclerView.Adapter<TodoRecyclerVi
 //                                    }
 //                                });
 
-                            if (User.getCurrentUser(User.class) != null){
-                                ToDoUtils.deleteNetTodos(context, todos, new ToDoUtils.DeleteTaskListener() {
-                                    @Override
-                                    public void onSuccess() {
-
-                                    }
-
-                                    @Override
-                                    public void onError(int errorCord, String msg) {
-                                        Toasty.warning(context, msg, Toast.LENGTH_SHORT, true).show();
-                                    }
-                                });
-                            }
+                            // if (User.getCurrentUser(User.class) != null){
+                            //     ToDoUtils.deleteNetTodos(context, todos, new ToDoUtils.DeleteTaskListener() {
+                            //         @Override
+                            //         public void onSuccess() {
+                            //
+                            //         }
+                            //
+                            //         @Override
+                            //         public void onError(int errorCord, String msg) {
+                            //             Toasty.warning(context, msg, Toast.LENGTH_SHORT, true).show();
+                            //         }
+                            //     });
+                            // }
                             todosList.remove(truePosition);
                             notifyItemRemoved(itemPosition);
                             notifyItemRangeChanged(itemPosition,todosList.size());
